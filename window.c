@@ -31,10 +31,19 @@ int main(int argc, char *argv[]) {
 
 	SDL_Renderer *rend = SDL_CreateRenderer(win, -1, RENDFLAGS);
 
+	if (rend == NULL) {
+		printf("Error initalizing renderer: %s\n", SDL_GetError());
+		return 1;
+	}
+
 	SDL_Surface *surface;
 	surface = IMG_Load(TEXTURE_LOC);
 
 	SDL_Texture *tex = SDL_CreateTextureFromSurface(rend, surface);
+	if (tex == NULL) {
+		printf("Error initalizing texture: %s\n", SDL_GetError());
+		return 1;
+	}
 
 	SDL_FreeSurface(surface);
 
