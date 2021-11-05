@@ -7,16 +7,24 @@
 #define FRAMERATE 60
 #define IMAGESCALE 6
 #define TEXTURE_LOC "img.jpg"
+#define WINNAME "Test Window"
 
-const int speed = 300;
+const int SPEED = 300;
 int close = 0;
+const uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
 
 int main(int argc, char *argv[]) {
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		printf("Error initializing SDL: %s\n", SDL_GetError());
+		return 1;
 	}
-	SDL_Window *win = SDL_CreateWindow("Test Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
+	SDL_Window *win = SDL_CreateWindow(WINNAME, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, WINFLAGS);
+
+	if (win == NULL) {
+		printf("Error initializing window: %s\n", SDL_GetError());
+		return 1;
+	}
 
 	uint32_t render_flags = SDL_RENDERER_ACCELERATED;
 	SDL_Renderer *rend = SDL_CreateRenderer(win, -1, render_flags);
@@ -60,19 +68,19 @@ int main(int argc, char *argv[]) {
 							break;
 						case SDL_SCANCODE_W:
 						case SDL_SCANCODE_UP:
-							dest.y -= speed / (FRAMERATE/2);
+							dest.y -= SPEED / (FRAMERATE/2);
 							break;
 						case SDL_SCANCODE_A:
 						case SDL_SCANCODE_LEFT:
-							dest.x -= speed / (FRAMERATE/2);
+							dest.x -= SPEED / (FRAMERATE/2);
 							break;
 						case SDL_SCANCODE_S:
 						case SDL_SCANCODE_DOWN:
-							dest.y += speed / (FRAMERATE/2);
+							dest.y += SPEED / (FRAMERATE/2);
 							break;
 						case SDL_SCANCODE_D:
 						case SDL_SCANCODE_RIGHT:
-							dest.x += speed / (FRAMERATE/2);
+							dest.x += SPEED / (FRAMERATE/2);
 							break;
 						default:
 							break;
