@@ -13,7 +13,35 @@ const int SPEED = 300;
 const uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
 const uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
+typedef struct {
+	SDL_Texture *tex;
+	SDL_Rect *rect;
+} textureDict;
+
 int close = 0;
+
+SDL_Rect getRect(SDL_Renderer *rend, char *imageloc, int scale, int x, int y) {
+
+	SDL_Surface *surface;
+	surface = IMG_Load(imageloc);
+
+	SDL_Texture *tex = SDL_CreateTextureFromSurface(rend, surface);
+	if (tex == NULL) {
+		printf("Error initalizing texture: %s\n", SDL_GetError());
+	}
+
+	SDL_FreeSurface(surface);
+	
+	SDL_Rect out;
+	SDL_QueryTexture(tex, NULL, NULL, &out.w, &out.h);
+
+	out.w = out.w / scale;
+	out.h = out.h / scale;
+	out.x = x - out.w;
+	out.y = y - out.h;
+
+	return out;
+}
 
 int main(int argc, char *argv[]) {
 
@@ -36,6 +64,9 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
+	SDL_Rect dest = getRect(rend, TEXTURE_LOC, IMAGESCALE, WIDTH/2, HEIGHT/2);
+	SDL_Rect plain = getRect(rend, TEXTURE_LOC, 2*IMAGESCALE, WIDTH/4, HEIGHT/4);
+	/*
 	SDL_Surface *surface;
 	surface = IMG_Load(TEXTURE_LOC);
 
@@ -60,6 +91,8 @@ int main(int argc, char *argv[]) {
 	dest.h = dest.h/IMAGESCALE;
 	dest.x = (WIDTH-dest.w)/2;
 	dest.y = (HEIGHT-dest.h)/2;
+
+	*/
 
 	while (!close) {
 		
@@ -120,6 +153,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	SDL_RenderClear(rend);
+
 	SDL_RenderCopy(rend, tex, NULL, &dest);
 	SDL_RenderCopy(rend, tex, NULL, &plain);
 
