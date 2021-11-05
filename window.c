@@ -2,16 +2,18 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
 
-#define WIDTH 800
-#define HEIGHT 800
+#define WIDTH 1280
+#define HEIGHT 720
 #define FRAMERATE 60
 #define IMAGESCALE 6
 #define TEXTURE_LOC "img.jpg"
 #define WINNAME "Test Window"
 
 const int SPEED = 300;
-int close = 0;
 const uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
+const uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
+
+int close = 0;
 
 int main(int argc, char *argv[]) {
 
@@ -19,6 +21,7 @@ int main(int argc, char *argv[]) {
 		printf("Error initializing SDL: %s\n", SDL_GetError());
 		return 1;
 	}
+
 	SDL_Window *win = SDL_CreateWindow(WINNAME, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, WINFLAGS);
 
 	if (win == NULL) {
@@ -26,8 +29,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	uint32_t render_flags = SDL_RENDERER_ACCELERATED;
-	SDL_Renderer *rend = SDL_CreateRenderer(win, -1, render_flags);
+	SDL_Renderer *rend = SDL_CreateRenderer(win, -1, RENDFLAGS);
 
 	SDL_Surface *surface;
 	surface = IMG_Load(TEXTURE_LOC);
