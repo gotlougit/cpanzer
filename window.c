@@ -4,14 +4,14 @@
 #include <stdio.h>
 #include "objects.h"
 
-#define WIDTH 1280
+#define WIDTH 1000 
 #define HEIGHT 720
 #define FRAMERATE 60
-#define IMAGESCALE 6
-#define TEXTURE_LOC "img.jpg"
+#define IMAGESCALE 0.9
+#define TEXTURE_LOC "player.png"
 #define WINNAME "Game Window"
 
-const int SPEED = 300;
+const int SPEED = 10;
 const uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
 const uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
@@ -38,32 +38,17 @@ int main(int argc, char *argv[]) {
 		printf("Error initalizing renderer: %s\n", SDL_GetError());
 		return 1;
 	}
-
-	texlist = addTexture(texlist, rend, TEXTURE_LOC, "sample");
-	for (textures *temp = texlist; temp != NULL; temp = temp->next) {
-		printf("%s\n",temp->texname);
-	}
-	SDL_Texture *tex = getTexture(texlist, "sample");
-
-	SDL_Rect dest, plain;
-	SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h);
-	SDL_QueryTexture(tex, NULL, NULL, &plain.w, &plain.h);
-
-	plain.w = plain.w / (2*IMAGESCALE);
-	plain.h = plain.h / (2*IMAGESCALE);
-	plain.x = (WIDTH-plain.w)/4;
-	plain.y = (HEIGHT-plain.h)/4;
-
-	dest.w = dest.w/IMAGESCALE;
-	dest.h = dest.h/IMAGESCALE;
-	dest.x = (WIDTH-dest.w)/2;
-	dest.y = (HEIGHT-dest.h)/2;
-
+	
+	texlist = addTexture(texlist, rend, TEXTURE_LOC, "player",WIDTH/2,HEIGHT/2);
+	texlist = addTexture(texlist, rend, "img.jpg", "enemy",WIDTH/2 - 100, HEIGHT/2 - 300);
+	texlist = addTexture(texlist, rend, "snowmap.png","bg",0,0);
+	
 	while (!close) {
 		
 		/*Take input from the player and process it*/
 		SDL_Event event;
-
+		int dx = 0;
+		int dy = 0;
 		while (SDL_PollEvent(&event)) {
 			
 			switch (event.type) {
@@ -78,19 +63,19 @@ int main(int argc, char *argv[]) {
 							break;
 						case SDL_SCANCODE_W:
 						case SDL_SCANCODE_UP:
-							dest.y -= SPEED / (FRAMERATE/2);
+							dy -= SPEED;
 							break;
 						case SDL_SCANCODE_A:
 						case SDL_SCANCODE_LEFT:
-							dest.x -= SPEED / (FRAMERATE/2);
+							dx -= SPEED;
 							break;
 						case SDL_SCANCODE_S:
 						case SDL_SCANCODE_DOWN:
-							dest.y += SPEED / (FRAMERATE/2);
+							dy += SPEED;
 							break;
 						case SDL_SCANCODE_D:
 						case SDL_SCANCODE_RIGHT:
-							dest.x += SPEED / (FRAMERATE/2);
+							dx += SPEED;
 							break;
 						default:
 							break;
@@ -101,38 +86,21 @@ int main(int argc, char *argv[]) {
 			}
 
 		}
-
-	/*Basic edge detection code*/
-	if (dest.x + dest.w > WIDTH) {
-		dest.x = WIDTH - dest.w;
-	}
-
-	if (dest.x < 0) {
-		dest.x = 0;
-	}
-
-	if (dest.y + dest.h > HEIGHT) {
-		dest.y = HEIGHT - dest.h;
-	}
 	
-	if (dest.y < 0) {
-		dest.y = 0;
-	}
-
-	/*Clears the renderer and redraws the objects*/
-	SDL_RenderClear(rend);
-	SDL_RenderCopy(rend, tex, NULL, &plain);
-	SDL_RenderCopy(rend, tex, NULL, &dest);
-
-	SDL_RenderPresent(rend);
+		modRect(texlist, "player", dx, dy);
+		checkBounds(texlist, WIDTH, HEIGHT);
 	
-	SDL_Delay(1000/FRAMERATE);
+		/*Clears the renderer and redraws the objects*/
+		SDL_RenderClear(rend);
+		renderTextures(texlist, rend);
+		SDL_RenderPresent(rend);
+		
+		SDL_Delay(1000/FRAMERATE);
 
 	}
 
 	/*Clean up operations before quitting*/
 	destroyTextures(texlist);
-	//SDL_DestroyTexture(tex);
 	SDL_DestroyRenderer(rend);
 	SDL_DestroyWindow(win);
 	SDL_Quit();
