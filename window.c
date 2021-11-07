@@ -1,19 +1,22 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
+#include <stdio.h>
+#include "objects.h"
 
 #define WIDTH 1280
 #define HEIGHT 720
 #define FRAMERATE 60
 #define IMAGESCALE 6
 #define TEXTURE_LOC "img.jpg"
-#define WINNAME "Test Window"
+#define WINNAME "Game Window"
 
 const int SPEED = 300;
 const uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
 const uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
 int close = 0;
+textures *texlist = NULL;
 
 int main(int argc, char *argv[]) {
 
@@ -36,16 +39,11 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	SDL_Surface *surface;
-	surface = IMG_Load(TEXTURE_LOC);
-
-	SDL_Texture *tex = SDL_CreateTextureFromSurface(rend, surface);
-	if (tex == NULL) {
-		printf("Error initalizing texture: %s\n", SDL_GetError());
-		return 1;
+	texlist = addTexture(texlist, rend, TEXTURE_LOC, "sample");
+	for (textures *temp = texlist; temp != NULL; temp = temp->next) {
+		printf("%s\n",temp->texname);
 	}
-
-	SDL_FreeSurface(surface);
+	SDL_Texture *tex = getTexture(texlist, "sample");
 
 	SDL_Rect dest, plain;
 	SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h);
@@ -63,6 +61,7 @@ int main(int argc, char *argv[]) {
 
 	while (!close) {
 		
+		/*Take input from the player and process it*/
 		SDL_Event event;
 
 		while (SDL_PollEvent(&event)) {
@@ -102,7 +101,8 @@ int main(int argc, char *argv[]) {
 			}
 
 		}
-	
+
+	/*Basic edge detection code*/
 	if (dest.x + dest.w > WIDTH) {
 		dest.x = WIDTH - dest.w;
 	}
@@ -119,18 +119,23 @@ int main(int argc, char *argv[]) {
 		dest.y = 0;
 	}
 
+	/*Clears the renderer and redraws the objects*/
 	SDL_RenderClear(rend);
-	SDL_RenderCopy(rend, tex, NULL, &dest);
 	SDL_RenderCopy(rend, tex, NULL, &plain);
+	SDL_RenderCopy(rend, tex, NULL, &dest);
 
 	SDL_RenderPresent(rend);
-	SDL_Delay(WIDTH/FRAMERATE);
+	
+	SDL_Delay(1000/FRAMERATE);
 
 	}
 
-	SDL_DestroyTexture(tex);
+	/*Clean up operations before quitting*/
+	destroyTextures(texlist);
+	//SDL_DestroyTexture(tex);
 	SDL_DestroyRenderer(rend);
 	SDL_DestroyWindow(win);
 	SDL_Quit();
+
 	return 0;
 }
