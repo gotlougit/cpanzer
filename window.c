@@ -100,6 +100,9 @@ int main(void) {
 		/*Changes the coordinates of player texture*/
 		modRect(texlist, "player", dx, dy);
 
+		/*Checks for collisions*/
+		checkCollision(texlist);
+
 		/*Checks objects if they aren't out of bounds*/
 		checkBounds(texlist, WIDTH, HEIGHT);
 	
