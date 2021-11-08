@@ -9,13 +9,13 @@ CFLAGS := `sdl2-config --libs --cflags` -ggdb3 -O0 --std=c99 -Wall -lSDL2_image 
 HDRS :=
 
 # add source files here
-SRCS := window.c #file-name.c
+SRCS := window.c objects.h#file-name.c
 
 # generate names of object files
 OBJS := $(SRCS:.c=.o)
 
 # name of executable
-EXEC := main#name your executable file
+EXEC := panzer #name your executable file
 
 # default recipe
 all: $(EXEC)
