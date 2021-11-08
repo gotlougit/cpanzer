@@ -7,9 +7,12 @@
 #define WIDTH 1000 
 #define HEIGHT 720
 #define FRAMERATE 60
+#define PLAYER_TEX "assets/player.png"
 #define IMAGESCALE 0.9
-#define TEXTURE_LOC "player.png"
-#define WINNAME "Game Window"
+#define ENEMY_TEX "assets/bot2.png"
+#define MAP_TEX "assets/snowmap.png"
+#define ICON "assets/icon.png"
+#define WINNAME "CPanzer"
 
 const int SPEED = 10;
 const uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
@@ -18,7 +21,7 @@ const uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 int close = 0;
 textures *texlist = NULL;
 
-int main(int argc, char *argv[]) {
+int main(void) {
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		printf("Error initializing SDL: %s\n", SDL_GetError());
@@ -38,10 +41,17 @@ int main(int argc, char *argv[]) {
 		printf("Error initalizing renderer: %s\n", SDL_GetError());
 		return 1;
 	}
-	
-	texlist = addTexture(texlist, rend, TEXTURE_LOC, "player",WIDTH/2,HEIGHT/2);
-	texlist = addTexture(texlist, rend, "img.jpg", "enemy",WIDTH/2 - 100, HEIGHT/2 - 300);
-	texlist = addTexture(texlist, rend, "snowmap.png","bg",0,0);
+
+	/*Sets a nice window icon*/
+	SDL_Surface *surf;
+	surf = IMG_Load(ICON);
+	SDL_SetWindowIcon(win, surf);
+	SDL_FreeSurface(surf);
+
+	/*Create all of the objects required*/
+	texlist = addTexture(texlist, rend, PLAYER_TEX, "player",WIDTH/2,HEIGHT/2);
+	texlist = addTexture(texlist, rend, ENEMY_TEX, "enemy",WIDTH/2 - 100, HEIGHT/2 - 300);
+	texlist = addTexture(texlist, rend, MAP_TEX,"bg",0,0);
 	
 	while (!close) {
 		
@@ -58,7 +68,7 @@ int main(int argc, char *argv[]) {
 					break;
 				case SDL_KEYDOWN:
 					switch (event.key.keysym.scancode) {
-						case SDL_SCANCODE_Q:
+						case SDL_SCANCODE_ESCAPE:
 							close = 1;
 							break;
 						case SDL_SCANCODE_W:
@@ -86,8 +96,11 @@ int main(int argc, char *argv[]) {
 			}
 
 		}
-	
+		
+		/*Changes the coordinates of player texture*/
 		modRect(texlist, "player", dx, dy);
+
+		/*Checks objects if they aren't out of bounds*/
 		checkBounds(texlist, WIDTH, HEIGHT);
 	
 		/*Clears the renderer and redraws the objects*/
@@ -95,6 +108,7 @@ int main(int argc, char *argv[]) {
 		renderTextures(texlist, rend);
 		SDL_RenderPresent(rend);
 		
+		/*Set framerate*/
 		SDL_Delay(1000/FRAMERATE);
 
 	}

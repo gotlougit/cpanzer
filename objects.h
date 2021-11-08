@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
+#include <stdio.h>
 
 typedef struct textures {
 
@@ -10,6 +11,7 @@ typedef struct textures {
 	struct textures *next;
 
 } textures;
+
 
 textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *texname, int x, int y) {
 
@@ -41,32 +43,6 @@ textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *
 		temp->next = list;
 		list = temp;
 		return list;
-	}
-
-}
-
-void checkBounds(textures *list, int WIDTH, int HEIGHT) {
-	
-	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		int x = (temp->rect).x;
-		int y = (temp->rect).y;
-		int w = (temp->rect).w;
-		int h = (temp->rect).h;
-		if (x + w > WIDTH) {
-			x = WIDTH - w;
-		}
-		if (x < 0) {
-			x = 0;
-		}
-		if (y + h > HEIGHT) {
-			y = HEIGHT - h;
-		}
-		if (y < 0) {
-			y = 0;
-		}
-
-		(temp->rect).x = x;
-		(temp->rect).y = y;
 	}
 
 }
@@ -123,6 +99,32 @@ void renderTextures(textures *list, SDL_Renderer *rend) {
 
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
 		SDL_RenderCopy(rend, temp->tex, NULL, &(temp->rect));
+	}
+
+}
+
+void checkBounds(textures *list, int WIDTH, int HEIGHT) {
+	
+	for (textures *temp = list; temp != NULL; temp = temp->next) {
+		int x = (temp->rect).x;
+		int y = (temp->rect).y;
+		int w = (temp->rect).w;
+		int h = (temp->rect).h;
+		if (x + w > WIDTH) {
+			x = WIDTH - w;
+		}
+		if (x < 0) {
+			x = 0;
+		}
+		if (y + h > HEIGHT) {
+			y = HEIGHT - h;
+		}
+		if (y < 0) {
+			y = 0;
+		}
+
+		(temp->rect).x = x;
+		(temp->rect).y = y;
 	}
 
 }
