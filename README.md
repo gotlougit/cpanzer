@@ -36,6 +36,8 @@ $ make
 
 - MySQL integration for keeping track of scores; this could be added in the form of SQLite but it seems unlikely.
 
-- Game menu screen; unnecessary for a demo
+- Game menu screen
 
-- Rage mode: again, unnecessary for a demo
+- Rage mode
+
+- Map and player tank options

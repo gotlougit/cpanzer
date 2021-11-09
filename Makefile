@@ -4,7 +4,7 @@
 CC := gcc 
 
 # set the compiler flags
-CFLAGS := `sdl2-config --libs --cflags` -ggdb3 -O2 --std=c99 -Wall -lSDL2_image -lm
+CFLAGS := `sdl2-config --libs --cflags` -O2 --std=c99 -Wall -lSDL2_image -lm -ggdb3
 # add header files here
 HDRS := objects.h input.h
 

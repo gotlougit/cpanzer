@@ -5,12 +5,11 @@ typedef struct {
 	int value[4];
 } inputResult;
 
-inputResult getInput(int SPEED, int pause_int) {
+inputResult getInput(int SPEED, int pause) {
 
 	int close = 0;
 	int dx = 0;
 	int dy = 0;
-	bool pause = (bool) pause_int;
 
 	SDL_Event event;
 
@@ -62,7 +61,7 @@ inputResult getInput(int SPEED, int pause_int) {
 	out.value[0] = dx;
 	out.value[1] = dy;
 	out.value[2] = close;
-	out.value[3] = (int) pause;
+	out.value[3] = pause;
 	return out;
 
 }
