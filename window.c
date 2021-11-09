@@ -3,6 +3,7 @@
 #include <SDL2/SDL_timer.h>
 #include <stdio.h>
 #include "objects.h"
+#include "input.h"
 
 #define WIDTH 1000 
 #define HEIGHT 720
@@ -11,6 +12,7 @@
 #define IMAGESCALE 0.9
 #define ENEMY_TEX "assets/bot2.png"
 #define MAP_TEX "assets/snowmap.png"
+#define HUD_TEX "assets/hud.png"
 #define ICON "assets/icon.png"
 #define WINNAME "CPanzer"
 
@@ -50,53 +52,19 @@ int main(void) {
 
 	/*Create all of the objects required*/
 	texlist = addTexture(texlist, rend, PLAYER_TEX, "player",WIDTH/2,HEIGHT/2);
-	texlist = addTexture(texlist, rend, ENEMY_TEX, "enemy",WIDTH/2 - 100, HEIGHT/2 - 300);
+	texlist = addTexture(texlist, rend, ENEMY_TEX, "enemy",WIDTH/2 - 200, HEIGHT/2 - 250);
+	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
 	texlist = addTexture(texlist, rend, MAP_TEX,"bg",0,0);
 	
 	while (!close) {
 		
 		/*Take input from the player and process it*/
-		SDL_Event event;
-		int dx = 0;
-		int dy = 0;
-		while (SDL_PollEvent(&event)) {
-			
-			switch (event.type) {
-				
-				case SDL_QUIT:
-					close = 1;
-					break;
-				case SDL_KEYDOWN:
-					switch (event.key.keysym.scancode) {
-						case SDL_SCANCODE_ESCAPE:
-							close = 1;
-							break;
-						case SDL_SCANCODE_W:
-						case SDL_SCANCODE_UP:
-							dy -= SPEED;
-							break;
-						case SDL_SCANCODE_A:
-						case SDL_SCANCODE_LEFT:
-							dx -= SPEED;
-							break;
-						case SDL_SCANCODE_S:
-						case SDL_SCANCODE_DOWN:
-							dy += SPEED;
-							break;
-						case SDL_SCANCODE_D:
-						case SDL_SCANCODE_RIGHT:
-							dx += SPEED;
-							break;
-						default:
-							break;
-					}
-					break;
 
+		inputResult input = getInput(SPEED);
+		int dx = input.value[0];
+		int dy = input.value[1];
+		close = input.value[2];
 
-			}
-
-		}
-		
 		/*Changes the coordinates of player texture*/
 		modRect(texlist, "player", dx, dy);
 
