@@ -55,34 +55,59 @@ int main(void) {
 	texlist = addTexture(texlist, rend, ENEMY_TEX, "enemy",WIDTH/2 - 200, HEIGHT/2 - 250);
 	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
 	texlist = addTexture(texlist, rend, MAP_TEX,"bg",0,0);
-	
+
+	/*Variables for pausing the game*/
+	int pause = 0;
+	int pauseRun = 0;
+
 	while (!close) {
 		
 		/*Take input from the player and process it*/
-		inputResult input = getInput(SPEED);
-		int dx = input.value[0];
-		int dy = input.value[1];
+		inputResult input = getInput(SPEED, pause);
 		close = input.value[2];
+		pause = input.value[3];
 
-		/*Changes the coordinates of player texture*/
-		modRect(texlist, "player", dx, dy);
+		if (close) {
+			printf("Closing game..\n");
+			break;
+		}
 
-		/*Checks for collisions*/
-		checkCollision(texlist);
+		if (pause && !pauseRun) {
+			pauseRun = 1;
+			printf("Paused the game\n");
+		}
 
-		/*Checks for any deaths; if there are any, remove from linked list*/
+		else if (!pause) {
+			
+			if (pauseRun) {
+				pauseRun = 0;
+				printf("Unpaused game\n");
+			}
 
+			int dx = input.value[0];
+			int dy = input.value[1];
 
-		/*Checks objects if they aren't out of bounds*/
-		checkBounds(texlist, WIDTH, HEIGHT);
+			/*Changes the coordinates of player texture*/
+			modRect(texlist, "player", dx, dy);
+
+			/*Checks for collisions*/
+			checkCollision(texlist);
+
+			/*Checks for any deaths; if there are any, remove from linked list*/
+			/*TODO*/		
+
+			/*Checks objects if they aren't out of bounds*/
+			checkBounds(texlist, WIDTH, HEIGHT);
 	
-		/*Clears the renderer and redraws the objects*/
-		SDL_RenderClear(rend);
-		renderTextures(texlist, rend);
-		SDL_RenderPresent(rend);
-		
-		/*Set framerate*/
-		SDL_Delay(1000/FRAMERATE);
+			/*Clears the renderer and redraws the objects*/
+			SDL_RenderClear(rend);
+			renderTextures(texlist, rend);
+			SDL_RenderPresent(rend);
+			
+			/*Set framerate*/
+			SDL_Delay(1000/FRAMERATE);
+
+		}
 
 	}
 

@@ -1,16 +1,16 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_timer.h>
+#include <stdbool.h>
 
 typedef struct {
-	int value[3];
+	int value[4];
 } inputResult;
 
-inputResult getInput(int SPEED) {
+inputResult getInput(int SPEED, int pause_int) {
 
 	int close = 0;
 	int dx = 0;
 	int dy = 0;
+	bool pause = (bool) pause_int;
 
 	SDL_Event event;
 
@@ -20,6 +20,14 @@ inputResult getInput(int SPEED) {
 			case SDL_QUIT:
 				close = 1;
 				break;
+			case SDL_KEYUP:
+				switch (event.key.keysym.scancode) {
+					case SDL_SCANCODE_P:
+						pause = !pause;
+						break;
+					default:
+						break;
+				}
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.scancode) {
 					case SDL_SCANCODE_ESCAPE:
@@ -54,7 +62,7 @@ inputResult getInput(int SPEED) {
 	out.value[0] = dx;
 	out.value[1] = dy;
 	out.value[2] = close;
-	//out.value = {dx, dy, close};
+	out.value[3] = (int) pause;
 	return out;
 
 }
