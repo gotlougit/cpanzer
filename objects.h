@@ -13,6 +13,7 @@ typedef struct textures {
 	struct textures *next;
 	int oldx;
 	int oldy;
+	int health;
 
 } textures;
 
@@ -46,6 +47,7 @@ textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *
 		temp->texname = texname;
 		temp->oldx = x;
 		temp->oldy = y;
+		temp->health = 100;
 		temp->next = list;
 		list = temp;
 		return list;

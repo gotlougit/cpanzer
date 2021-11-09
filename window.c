@@ -16,7 +16,7 @@
 #define ICON "assets/icon.png"
 #define WINNAME "CPanzer"
 
-const int SPEED = 10;
+const int SPEED = 16;
 const uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
 const uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
@@ -59,7 +59,6 @@ int main(void) {
 	while (!close) {
 		
 		/*Take input from the player and process it*/
-
 		inputResult input = getInput(SPEED);
 		int dx = input.value[0];
 		int dy = input.value[1];
@@ -70,6 +69,9 @@ int main(void) {
 
 		/*Checks for collisions*/
 		checkCollision(texlist);
+
+		/*Checks for any deaths; if there are any, remove from linked list*/
+
 
 		/*Checks objects if they aren't out of bounds*/
 		checkBounds(texlist, WIDTH, HEIGHT);
