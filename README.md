@@ -20,7 +20,9 @@ $ make
 
 - Collision detection
 
-- Basic HUD
+- HUD Space
+
+- Pausing
 
 ## Roadmap
 
@@ -28,10 +30,12 @@ $ make
 
 - Nozzle and projectile
 
-- Pausing
+- HUD Info
 
 ## Things to be left out
 
 - MySQL integration for keeping track of scores; this could be added in the form of SQLite but it seems unlikely.
 
 - Game menu screen; unnecessary for a demo
+
+- Rage mode: again, unnecessary for a demo
