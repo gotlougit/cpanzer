@@ -17,7 +17,6 @@ typedef struct textures {
 
 } textures;
 
-
 textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *texname, int x, int y) {
 
 	SDL_Surface *surf;
@@ -112,6 +111,39 @@ void renderTextures(textures *list, SDL_Renderer *rend) {
 	}
 
 }
+
+textures * updateEnemy(textures *list,int ENEMYSPEED, int px, int py) {
+
+	for (textures *iter = list; iter != NULL; iter = iter->next) {
+		if (strcmp(iter->texname,"enemy") == 0) {
+			int ex = (iter->rect).x;
+			int ey = (iter->rect).y;
+
+			int dx = 0;
+			int dy = 0;
+
+			if (ex > px) {
+				dx = -ENEMYSPEED;	
+			} else if (ex < px) {
+				dx = ENEMYSPEED;	
+			}	
+			else if (ey > py) {
+				dy = -ENEMYSPEED;
+			} else if (ey < py) {
+				dy = ENEMYSPEED;
+			}
+			
+			(iter->oldx) = ex;
+			(iter->oldy) = ey;
+			(iter->rect).x += dx;
+			(iter->rect).y += dy;
+			
+		}
+	}
+	
+	return list;
+}
+
 
 void checkBounds(textures *list, int WIDTH, int HEIGHT) {
 	

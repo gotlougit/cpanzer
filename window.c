@@ -17,6 +17,7 @@
 #define WINNAME "CPanzer"
 
 const int SPEED = 16;
+const int ENEMYSPEED = 1;
 const uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
 const uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
@@ -25,10 +26,14 @@ textures *texlist = NULL;
 
 int main(void) {
 
+	printf("Loading game...\n");
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		printf("Error initializing SDL: %s\n", SDL_GetError());
 		return 1;
 	}
+
+	/*Creates the main window*/
 
 	SDL_Window *win = SDL_CreateWindow(WINNAME, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, WINFLAGS);
 
@@ -36,6 +41,8 @@ int main(void) {
 		printf("Error initializing window: %s\n", SDL_GetError());
 		return 1;
 	}
+
+	/*Creates the SDL_Renderer object*/
 
 	SDL_Renderer *rend = SDL_CreateRenderer(win, -1, RENDFLAGS);
 
@@ -60,6 +67,7 @@ int main(void) {
 	int pause = 0;
 	int pauseRun = 0;
 
+	/*Game loop*/
 	while (!close) {
 		
 		/*Take input from the player and process it*/
@@ -89,6 +97,12 @@ int main(void) {
 
 			/*Changes the coordinates of player texture*/
 			modRect(texlist, "player", dx, dy);
+
+			/*Updates all objects as per their functions*/
+			/*TODO*/
+			int px = getRect(texlist, "player").x;
+			int py = getRect(texlist, "player").y;
+			texlist = updateEnemy(texlist, ENEMYSPEED,px,py);
 
 			/*Checks for collisions*/
 			checkCollision(texlist);
