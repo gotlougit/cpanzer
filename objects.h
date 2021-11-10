@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 typedef struct textures {
 
@@ -218,26 +219,53 @@ int areCollidingX(textures *obj1, textures *obj2) {
 
 }
 
-void collisionAction(textures *obj) {
+void collisionAction(textures *obj, bool flag) {
 
-	(obj->rect).x = obj->oldx;
-	(obj->rect).y = obj->oldy;
+	if (flag) {
+		obj->health = 0;
+	} else {
+		(obj->rect).x = obj->oldx;
+		(obj->rect).y = obj->oldy;
+	}
+
+}
+
+void removeDead(textures *list) {
+
+	textures *obj= list->next;
+	textures *last = list;
+	while (obj != NULL) {
+		if (obj->health == 0) {
+			last->next = obj->next;
+			textures *temp = obj->next;	
+			SDL_DestroyTexture(obj->tex);
+			free(obj);
+			textures *obj = temp;
+		
+		}
+		obj = obj->next;
+		last = last->next;
+	}
 
 }
 
 void checkCollision(textures *list) {
 
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		if (strcmp(temp->texname,"bg") != 0) {
+		if ((strcmp(temp->texname,"bg") != 0) && temp->health > 0) {
 
 			for (textures *obj = list; obj != NULL; obj = obj->next) {
-				if ( (obj != temp) && (strcmp(obj->texname,"bg") != 0) )  {
+				if ( (obj != temp) && (strcmp(obj->texname,"bg") != 0) && obj->health > 0 )  {
 		
 					int resultx = areCollidingX(obj, temp);		
 					int resulty = areCollidingY(obj,temp);
+
+					bool flag1 = ( !strcmp(obj->texname,"enemy") && !strcmp(temp->texname,"player") );
+					bool flag2 = ( !strcmp(obj->texname,"player") && !strcmp(temp->texname,"enemy"));
+					
 					if (resultx && resulty) {
-						collisionAction(obj);
-						collisionAction(temp);
+						collisionAction(obj,flag1);
+						collisionAction(temp,flag2);
 					}	
 				}
 			}

@@ -2,6 +2,9 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 #include "objects.h"
 #include "input.h"
 
@@ -15,14 +18,18 @@
 #define HUD_TEX "assets/hud.png"
 #define ICON "assets/icon.png"
 #define WINNAME "CPanzer"
+#define HUDHEIGHT 150
 
 const int SPEED = 16;
 const int ENEMYSPEED = 1;
+const int ENEMYCOUNT = 1;
+
 const uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
 const uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
 int close = 0;
 textures *texlist = NULL;
+
 
 int main(void) {
 
@@ -59,7 +66,33 @@ int main(void) {
 
 	/*Create all of the objects required*/
 	texlist = addTexture(texlist, rend, PLAYER_TEX, "player",WIDTH/2,HEIGHT/2);
-	texlist = addTexture(texlist, rend, ENEMY_TEX, "enemy",WIDTH/2 - 200, HEIGHT/2 - 250);
+
+	int randomx[ENEMYCOUNT];
+	int randomy[ENEMYCOUNT];
+
+	for (int i = 0; i < ENEMYCOUNT; i++) {
+
+		int rx = (rand() % (WIDTH - HUDHEIGHT + 1)) + HUDHEIGHT;
+		int ry = (rand() % (HEIGHT - HUDHEIGHT + 1)) + HUDHEIGHT;
+
+		int flag = 0;
+
+		for (int j = 0; j < ENEMYCOUNT; j++) {
+			if (randomx[j] == rx) {
+				flag = 1;
+			}
+			if (randomy[j] == ry) {
+				flag = 1;
+			}
+		}
+		
+		if (!flag) {
+			texlist = addTexture(texlist, rend, ENEMY_TEX, "enemy",rx,ry);
+		} else {
+			i-=1;
+		}
+	}
+
 	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
 	texlist = addTexture(texlist, rend, MAP_TEX,"bg",0,0);
 
@@ -99,7 +132,6 @@ int main(void) {
 			modRect(texlist, "player", dx, dy);
 
 			/*Updates all objects as per their functions*/
-			/*TODO*/
 			int px = getRect(texlist, "player").x;
 			int py = getRect(texlist, "player").y;
 			texlist = updateEnemy(texlist, ENEMYSPEED,px,py);
@@ -109,6 +141,7 @@ int main(void) {
 
 			/*Checks for any deaths; if there are any, remove from linked list*/
 			/*TODO*/		
+			removeDead(texlist);
 
 			/*Checks objects if they aren't out of bounds*/
 			checkBounds(texlist, WIDTH, HEIGHT);
