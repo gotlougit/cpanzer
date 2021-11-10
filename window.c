@@ -22,7 +22,7 @@
 
 const int SPEED = 16;
 const int ENEMYSPEED = 1;
-const int ENEMYCOUNT = 1;
+const int ENEMYCOUNT = 10;
 
 const uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
 const uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
@@ -140,7 +140,6 @@ int main(void) {
 			checkCollision(texlist);
 
 			/*Checks for any deaths; if there are any, remove from linked list*/
-			/*TODO*/		
 			removeDead(texlist);
 
 			/*Checks objects if they aren't out of bounds*/
