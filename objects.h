@@ -1,10 +1,18 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+
+#define POINTINC 10
+
+typedef struct basictex {
+	SDL_Texture *tex;
+	SDL_Rect *rect;
+} basictex;
 
 typedef struct textures {
 
@@ -15,13 +23,11 @@ typedef struct textures {
 	int oldx;
 	int oldy;
 	int health;
+	int points;
 
 } textures;
 
-textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *texname, int x, int y) {
-
-	SDL_Surface *surf;
-	surf = IMG_Load(imageloc);
+SDL_Texture * makeTexture(SDL_Renderer *rend, SDL_Surface *surf) {
 
 	SDL_Texture *tex = SDL_CreateTextureFromSurface(rend, surf);
 
@@ -30,8 +36,18 @@ textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *
 		return NULL;
 	}
 	
-	SDL_FreeSurface(surf);
+	return tex;
 
+}
+
+textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *texname, int x, int y) {
+
+	SDL_Surface *surf;
+	surf = IMG_Load(imageloc);
+
+	SDL_Texture *tex = makeTexture(rend,surf);
+	SDL_FreeSurface(surf);
+	
 	SDL_Rect rect;
 	SDL_QueryTexture(tex, NULL, NULL, &rect.w, &rect.h);
 	rect.x = x;
@@ -48,10 +64,33 @@ textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *
 		temp->oldx = x;
 		temp->oldy = y;
 		temp->health = 100;
+		temp->points = 0;
 		temp->next = list;
 		list = temp;
 		return list;
 	}
+
+}
+
+basictex writeText(SDL_Renderer *rend, char *text, int x, int y) {
+
+	TTF_Font *font = TTF_OpenFont("font.ttf",36);
+	SDL_Color color = {127,127,127};
+
+	SDL_Surface *surf = TTF_RenderText_Solid(font, text, color);
+	SDL_Texture *tex = makeTexture(rend,surf);
+	SDL_FreeSurface(surf);
+
+	SDL_Rect rect;
+	SDL_QueryTexture(tex, NULL, NULL, &rect.w, &rect.h);
+	rect.x = x;
+	rect.y = y;
+
+	basictex txt;
+	txt.rect = &rect;
+	txt.tex = &tex;
+
+	return txt;
 
 }
 
@@ -68,10 +107,20 @@ void modRect(textures *list, char *texname, int dx, int dy) {
 
 }
 
+int getPoints(textures *list) {
+
+	for (textures *temp = list; temp != NULL; temp = temp->next) {
+		if (strcmp(temp->texname,"player") == 0) {
+			return temp->points;
+		}
+	}
+
+}
+
 SDL_Rect getRect(textures *list, char *texname) {
 
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		if (temp->texname == texname) {
+		if (strcmp(temp->texname,texname) == 0) {
 			return temp->rect;
 		}
 	}
@@ -219,9 +268,15 @@ int areCollidingX(textures *obj1, textures *obj2) {
 
 }
 
-void collisionAction(textures *obj, bool flag) {
+void collisionAction(textures *obj, char *collideswith) {
 
-	if (flag) {
+	bool isenemy = strcmp(obj->texname,"enemy") == 0 && strcmp(collideswith,"player") == 0;
+	bool isplayer = strcmp(obj->texname,"player") == 0 && strcmp(collideswith,"enemy") == 0;
+
+	if (isplayer) {
+		obj->points+=POINTINC;
+	}
+	else if (isenemy) {
 		obj->health = 0;
 	} else {
 		(obj->rect).x = obj->oldx;
@@ -260,12 +315,9 @@ void checkCollision(textures *list) {
 					int resultx = areCollidingX(obj, temp);		
 					int resulty = areCollidingY(obj,temp);
 
-					bool flag1 = ( !strcmp(obj->texname,"enemy") && !strcmp(temp->texname,"player") );
-					bool flag2 = ( !strcmp(obj->texname,"player") && !strcmp(temp->texname,"enemy"));
-					
 					if (resultx && resulty) {
-						collisionAction(obj,flag1);
-						collisionAction(temp,flag2);
+						collisionAction(obj,temp->texname);
+						collisionAction(temp,obj->texname);
 					}	
 				}
 			}

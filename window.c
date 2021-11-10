@@ -30,7 +30,6 @@ const uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 int close = 0;
 textures *texlist = NULL;
 
-
 int main(void) {
 
 	printf("Loading game...\n");
@@ -96,6 +95,9 @@ int main(void) {
 	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
 	texlist = addTexture(texlist, rend, MAP_TEX,"bg",0,0);
 
+	/*Create the HUD*/
+	//basictex hud = writeText(rend, "Points: ", WIDTH-200,HEIGHT-200);
+
 	/*Variables for pausing the game*/
 	int pause = 0;
 	int pauseRun = 0;
@@ -144,10 +146,12 @@ int main(void) {
 
 			/*Checks objects if they aren't out of bounds*/
 			checkBounds(texlist, WIDTH, HEIGHT);
-	
+
 			/*Clears the renderer and redraws the objects*/
 			SDL_RenderClear(rend);
 			renderTextures(texlist, rend);
+
+			//SDL_RenderCopy(rend,hud.tex,NULL,&hud.rect);
 			SDL_RenderPresent(rend);
 			
 			/*Set framerate*/
