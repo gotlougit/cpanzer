@@ -8,11 +8,13 @@
 #include <stdbool.h>
 
 #define POINTINC 10
+#define FONTLOC "font.ttf"
+#define FONTSIZE 12
 
-typedef struct basictex {
+typedef struct {
 	SDL_Texture *tex;
-	SDL_Rect *rect;
-} basictex;
+	SDL_Rect rect;
+} textObj;
 
 typedef struct textures {
 
@@ -72,25 +74,33 @@ textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *
 
 }
 
-basictex writeText(SDL_Renderer *rend, char *text, int x, int y) {
+textObj createText(SDL_Renderer *rend, char *text, int x, int y) {
 
-	TTF_Font *font = TTF_OpenFont("font.ttf",36);
-	SDL_Color color = {127,127,127};
+	TTF_Font *font = TTF_OpenFont(FONTLOC,FONTSIZE);
+	if (font == NULL) {
+		printf("Error opening font: %s\n",TTF_GetError());
+	}
+	SDL_Color color = {255,255,255};
 
 	SDL_Surface *surf = TTF_RenderText_Solid(font, text, color);
+	if (surf == NULL) {
+		printf("Error creating text surface: %s\n",TTF_GetError());
+	}
 	SDL_Texture *tex = makeTexture(rend,surf);
 	SDL_FreeSurface(surf);
 
 	SDL_Rect rect;
-	SDL_QueryTexture(tex, NULL, NULL, &rect.w, &rect.h);
 	rect.x = x;
 	rect.y = y;
+	/*TODO Fix these arbitrary values for width and height of text*/
+	rect.w = 200; 
+	rect.h = 100;
 
-	basictex txt;
-	txt.rect = &rect;
-	txt.tex = &tex;
+	textObj out;
+	out.tex = tex;
+	out.rect = rect;
 
-	return txt;
+	return out;
 
 }
 

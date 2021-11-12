@@ -22,7 +22,7 @@
 
 const int SPEED = 16;
 const int ENEMYSPEED = 1;
-const int ENEMYCOUNT = 10;
+const int ENEMYCOUNT = 2;
 
 const uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
 const uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
@@ -36,6 +36,11 @@ int main(void) {
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		printf("Error initializing SDL: %s\n", SDL_GetError());
+		return 1;
+	}
+
+	if (TTF_Init() != 0) {
+		printf("Error initializing SDL_TTF: %s\n", TTF_GetError());
 		return 1;
 	}
 
@@ -96,7 +101,7 @@ int main(void) {
 	texlist = addTexture(texlist, rend, MAP_TEX,"bg",0,0);
 
 	/*Create the HUD*/
-	//basictex hud = writeText(rend, "Points: ", WIDTH-200,HEIGHT-200);
+	textObj hud = createText(rend, "Hello world",100,HEIGHT-90);
 
 	/*Variables for pausing the game*/
 	int pause = 0;
@@ -151,7 +156,7 @@ int main(void) {
 			SDL_RenderClear(rend);
 			renderTextures(texlist, rend);
 
-			//SDL_RenderCopy(rend,hud.tex,NULL,&hud.rect);
+			SDL_RenderCopy(rend,hud.tex,NULL,&(hud.rect));
 			SDL_RenderPresent(rend);
 			
 			/*Set framerate*/
@@ -165,6 +170,7 @@ int main(void) {
 	destroyTextures(texlist);
 	SDL_DestroyRenderer(rend);
 	SDL_DestroyWindow(win);
+	TTF_Quit();
 	SDL_Quit();
 
 	return 0;
