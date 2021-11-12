@@ -19,6 +19,8 @@
 #define ICON "assets/icon.png"
 #define WINNAME "CPanzer"
 #define HUDHEIGHT 150
+#define HUDX 0
+#define HUDY (HEIGHT-50)
 
 const int SPEED = 16;
 const int ENEMYSPEED = 1;
@@ -101,7 +103,7 @@ int main(void) {
 	texlist = addTexture(texlist, rend, MAP_TEX,"bg",0,0);
 
 	/*Create the HUD*/
-	textObj hud = createText(rend, "Hello world",100,HEIGHT-90);
+	textObj hud = createText(rend, "Points: 0",HUDX,HUDY);
 
 	/*Variables for pausing the game*/
 	int pause = 0;
@@ -155,7 +157,12 @@ int main(void) {
 			/*Clears the renderer and redraws the objects*/
 			SDL_RenderClear(rend);
 			renderTextures(texlist, rend);
-
+			int points = getPoints(texlist);
+			int health = getHealth(texlist);
+			char statement[50];
+			sprintf(statement, "Health: %d | Points: %d",health,points);
+			/*TODO Get rid of magic numbers in HUD Rendering*/
+			textObj hud = createText(rend, statement,HUDX,HUDY);
 			SDL_RenderCopy(rend,hud.tex,NULL,&(hud.rect));
 			SDL_RenderPresent(rend);
 			

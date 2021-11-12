@@ -8,8 +8,15 @@
 #include <stdbool.h>
 
 #define POINTINC 10
-#define FONTLOC "font.ttf"
-#define FONTSIZE 12
+#define FONTLOC "assets/font.ttf"
+#define FONTSIZE 42 
+
+const SDL_Color white = {255,255,255};
+const SDL_Color red = {255,0,0};
+const SDL_Color green = {0,255,0};
+const SDL_Color blue = {0,0,255};
+
+SDL_Color color = white;
 
 typedef struct {
 	SDL_Texture *tex;
@@ -80,9 +87,10 @@ textObj createText(SDL_Renderer *rend, char *text, int x, int y) {
 	if (font == NULL) {
 		printf("Error opening font: %s\n",TTF_GetError());
 	}
-	SDL_Color color = {255,255,255};
 
 	SDL_Surface *surf = TTF_RenderText_Solid(font, text, color);
+	int textwidth = surf->w;
+	int textheight = surf->h;
 	if (surf == NULL) {
 		printf("Error creating text surface: %s\n",TTF_GetError());
 	}
@@ -92,9 +100,8 @@ textObj createText(SDL_Renderer *rend, char *text, int x, int y) {
 	SDL_Rect rect;
 	rect.x = x;
 	rect.y = y;
-	/*TODO Fix these arbitrary values for width and height of text*/
-	rect.w = 200; 
-	rect.h = 100;
+	rect.w = textwidth; 
+	rect.h = textheight;
 
 	textObj out;
 	out.tex = tex;
@@ -112,6 +119,16 @@ void modRect(textures *list, char *texname, int dx, int dy) {
 			temp->oldy = (temp->rect).y;
 			(temp->rect).x += dx;
 			(temp->rect).y += dy;
+		}
+	}
+
+}
+
+int getHealth(textures *list) {
+
+	for (textures *temp = list; temp != NULL; temp = temp->next) {
+		if (strcmp(temp->texname,"player") == 0) {
+			return temp->health;
 		}
 	}
 
