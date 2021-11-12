@@ -111,6 +111,17 @@ textObj createText(SDL_Renderer *rend, char *text, int x, int y) {
 
 }
 
+void updateHUD(textures *list, SDL_Renderer *rend, int HUDX, int HUDY) {
+
+	int points = getPoints(list);
+	int health = getHealth(list);
+	char statement[50];
+	sprintf(statement, "Health: %d | Points: %d",health,points);
+	textObj hud = createText(rend, statement,HUDX,HUDY);
+	SDL_RenderCopy(rend,hud.tex,NULL,&(hud.rect));
+
+}
+
 void modRect(textures *list, char *texname, int dx, int dy) {
 
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
