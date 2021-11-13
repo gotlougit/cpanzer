@@ -1,10 +1,12 @@
-#include "constants.h"
 #include "objects.h"
 #include "input.h"
 
+#define MAIN 1
+#include "constants.h"
+
 int close = 0;
 textures *texlist = NULL;
-
+	
 int main(void) {
 
 	printf("Loading game...\n");

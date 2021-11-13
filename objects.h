@@ -1,22 +1,13 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_timer.h>
-#include <SDL2/SDL_ttf.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
+#define OBJECTS 1
 
-#define POINTINC 10
-#define FONTLOC "assets/font.ttf"
-#define FONTSIZE 42 
+#include "constants.h"
 
-const SDL_Color white = {255,255,255};
-const SDL_Color red = {255,0,0};
-const SDL_Color green = {0,255,0};
-const SDL_Color blue = {0,0,255};
+const SDL_Color WHITE = {255,255,255};
+const SDL_Color RED = {255,0,0};
+const SDL_Color GREEN = {0,255,0};
+const SDL_Color BLUE = {0,0,255};
 
-SDL_Color color = white;
+SDL_Color color = WHITE;
 
 typedef struct {
 	SDL_Texture *tex;
