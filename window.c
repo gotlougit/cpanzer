@@ -1,33 +1,6 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_timer.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
+#include "constants.h"
 #include "objects.h"
 #include "input.h"
-
-#define WIDTH 1000 
-#define HEIGHT 720
-#define FRAMERATE 60
-#define PLAYER_TEX "assets/player.png"
-#define IMAGESCALE 0.9
-#define ENEMY_TEX "assets/bot2.png"
-#define MAP_TEX "assets/snowmap.png"
-#define HUD_TEX "assets/hud.png"
-#define ICON "assets/icon.png"
-#define WINNAME "CPanzer"
-#define HUDHEIGHT 150
-#define HUDX 0
-#define HUDY (HEIGHT-50)
-
-const int SPEED = 16;
-const int ENEMYSPEED = 1;
-const int ENEMYCOUNT = 2;
-
-const uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
-const uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
 int close = 0;
 textures *texlist = NULL;
