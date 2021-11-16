@@ -28,11 +28,13 @@ $ make
 
 - Enemy AI
 
+- Rotating player when they move a certain way
+
 ## Roadmap
 
 - Nozzle and projectile
 
-- Rotating player when they move a certain way
+- Base
 
 ## Things to be left out
 
