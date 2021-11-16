@@ -24,13 +24,15 @@ $ make
 
 - Pausing
 
-## Roadmap
+- HUD info
 
 - Enemy AI
 
+## Roadmap
+
 - Nozzle and projectile
 
-- HUD Info
+- Rotating player when they move a certain way
 
 ## Things to be left out
 
