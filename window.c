@@ -77,9 +77,6 @@ int main(void) {
 	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
 	texlist = addTexture(texlist, rend, MAP_TEX,"bg",0,0);
 
-	/*Create the HUD*/
-	//textObj hud = createText(rend, "Points: 0",HUDX,HUDY);
-
 	/*Variables for pausing the game*/
 	int pause = 0;
 	int pauseRun = 0;
@@ -135,7 +132,10 @@ int main(void) {
 			/*Clears the renderer and redraws the objects*/
 			SDL_RenderClear(rend);
 			renderTextures(texlist, rend);
+			
+			/*Updates the HUD*/
 			updateHUD(texlist, rend, HUDX, HUDY);
+
 			SDL_RenderPresent(rend);
 			
 			/*Set framerate*/
