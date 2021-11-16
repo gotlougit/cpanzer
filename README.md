@@ -32,9 +32,13 @@ $ make
 
 ## Roadmap
 
-- Nozzle and projectile
+- Nozzle 
+
+- Projectile
 
 - Base
+
+- A better pause menu than the original Panzer
 
 ## Things to be left out
 
