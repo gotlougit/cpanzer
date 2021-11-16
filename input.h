@@ -3,7 +3,7 @@
 #include "constants.h"
 
 typedef struct {
-	int value[4];
+	int value[OUTPUTS];
 } inputResult;
 
 inputResult getInput(int SPEED, int pause) {
@@ -11,6 +11,7 @@ inputResult getInput(int SPEED, int pause) {
 	int close = 0;
 	int dx = 0;
 	int dy = 0;
+	int angle = 0;
 
 	SDL_Event event;
 
@@ -36,18 +37,22 @@ inputResult getInput(int SPEED, int pause) {
 					case SDL_SCANCODE_W:
 					case SDL_SCANCODE_UP:
 						dy -= SPEED;
+						angle = 0;
 						break;
 					case SDL_SCANCODE_A:
 					case SDL_SCANCODE_LEFT:
 						dx -= SPEED;
+						angle = -90;
 						break;
 					case SDL_SCANCODE_S:
 					case SDL_SCANCODE_DOWN:
 						dy += SPEED;
+						angle = 180;
 						break;
 					case SDL_SCANCODE_D:
 					case SDL_SCANCODE_RIGHT:
 						dx += SPEED;
+						angle = 90;
 						break;
 					default:
 						break;
@@ -63,6 +68,7 @@ inputResult getInput(int SPEED, int pause) {
 	out.value[1] = dy;
 	out.value[2] = close;
 	out.value[3] = pause;
+	out.value[4] = angle;
 	return out;
 
 }

@@ -33,6 +33,9 @@ const int ENEMYCOUNT = 2;
 
 #ifdef INPUT
 #include <stdbool.h>
+
+#define OUTPUTS 5
+
 #endif
 
 #ifdef OBJECTS

@@ -24,6 +24,7 @@ typedef struct textures {
 	int oldy;
 	int health;
 	int points;
+	int angle;
 
 } textures;
 
@@ -65,6 +66,7 @@ textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *
 		temp->oldy = y;
 		temp->health = 100;
 		temp->points = 0;
+		temp->angle = 0;
 		temp->next = list;
 		list = temp;
 		return list;
