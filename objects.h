@@ -98,6 +98,8 @@ textObj createText(SDL_Renderer *rend, char *text, int x, int y) {
 	out.tex = tex;
 	out.rect = rect;
 
+	TTF_CloseFont(font);
+
 	return out;
 
 }
@@ -110,6 +112,7 @@ void updateHUD(textures *list, SDL_Renderer *rend, int HUDX, int HUDY) {
 	sprintf(statement, "Health: %d | Points: %d",health,points);
 	textObj hud = createText(rend, statement,HUDX,HUDY);
 	SDL_RenderCopy(rend,hud.tex,NULL,&(hud.rect));
+	SDL_DestroyTexture(hud.tex);
 
 }
 
