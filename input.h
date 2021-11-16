@@ -6,12 +6,11 @@ typedef struct {
 	int value[OUTPUTS];
 } inputResult;
 
-inputResult getInput(int SPEED, int pause) {
+inputResult getInput(int SPEED, int pause, int angle) {
 
 	int close = 0;
 	int dx = 0;
 	int dy = 0;
-	int angle = 0;
 
 	SDL_Event event;
 

@@ -118,7 +118,7 @@ void updateHUD(textures *list, SDL_Renderer *rend, int HUDX, int HUDY) {
 
 }
 
-void modRect(textures *list, char *texname, int dx, int dy) {
+void modRect(textures *list, char *texname, int dx, int dy, int angle) {
 
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
 		if (temp->texname == texname) {
@@ -126,6 +126,11 @@ void modRect(textures *list, char *texname, int dx, int dy) {
 			temp->oldy = (temp->rect).y;
 			(temp->rect).x += dx;
 			(temp->rect).y += dy;
+
+			if (temp->angle != angle) {
+				temp->angle = angle;
+			}
+
 		}
 	}
 
@@ -136,6 +141,16 @@ int getHealth(textures *list) {
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
 		if (strcmp(temp->texname,"player") == 0) {
 			return temp->health;
+		}
+	}
+
+}
+
+int getAngle(textures *list) {
+
+	for (textures *temp = list; temp != NULL; temp = temp->next) {
+		if (strcmp(temp->texname,"player") == 0) {
+			return temp->angle;
 		}
 	}
 
@@ -191,7 +206,7 @@ SDL_Texture * getTexture(textures *list, char *texname) {
 void renderTextures(textures *list, SDL_Renderer *rend) {
 
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		SDL_RenderCopy(rend, temp->tex, NULL, &(temp->rect));
+		SDL_RenderCopyEx(rend, temp->tex, NULL, &(temp->rect), temp->angle, NULL, SDL_FLIP_NONE);
 	}
 
 }

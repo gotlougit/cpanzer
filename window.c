@@ -88,7 +88,9 @@ int main(void) {
 	while (!close) {
 		
 		/*Take input from the player and process it*/
-		inputResult input = getInput(SPEED, pause);
+		int angle = getAngle(texlist);
+		printf("%d\n",angle);
+		inputResult input = getInput(SPEED, pause, angle);
 		close = input.value[2];
 		pause = input.value[3];
 
@@ -111,9 +113,10 @@ int main(void) {
 
 			int dx = input.value[0];
 			int dy = input.value[1];
+			angle = input.value[4];
 
 			/*Changes the coordinates of player texture*/
-			modRect(texlist, "player", dx, dy);
+			modRect(texlist, "player", dx, dy, angle);
 
 			/*Updates all objects as per their functions*/
 			int px = getRect(texlist, "player").x;
