@@ -42,6 +42,8 @@ $ make
 
 - Enemy auto respawn when player kills some of them off
 
+- Sound effects
+
 ## Things to be left out
 
 - MySQL integration for keeping track of scores; this could be added in the form of SQLite but it seems unlikely.
