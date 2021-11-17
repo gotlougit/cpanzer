@@ -42,7 +42,7 @@ $ make
 
 - Enemy auto respawn when player kills some of them off
 
-- Sound effects
+- Sound effects (look at sdlwiki/Tutorials-AudioStream.html)
 
 ## Things to be left out
 

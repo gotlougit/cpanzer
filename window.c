@@ -5,12 +5,51 @@
 #include "constants.h"
 
 int close = 0;
+int randomx[ENEMYCOUNT];
+int randomy[ENEMYCOUNT];
 textures *texlist = NULL;
+
+textures *spawnEnemies(SDL_Renderer *rend, textures *list) {
 	
+	int ec = 0;
+
+	while (ec != ENEMYCOUNT) {
+
+		int rx = (rand() % (WIDTH + 1)) + COMPENSATION;
+		int ry = (rand() % (HEIGHT - HUDY + 1)) + COMPENSATION;
+
+		int flag = 0;
+
+		for (int i = 0; i < ENEMYCOUNT; i++) {
+			if (randomx[i] == rx || randomy[i] == ry) {
+				flag = 1;
+				break;
+			}
+		}
+		
+		if (!flag) {
+			list = addTexture(texlist, rend, ENEMY_TEX, "enemy",rx,ry);
+			randomx[ec] = rx;
+			randomy[ec] = ry;
+			ec++;
+		}
+	}
+
+	printf("randomx and randomy: \n");
+	for (int i = 0; i < ENEMYCOUNT; i++) {
+		printf("%d,%d\n",randomx[i], randomy[i]);
+	}
+
+	return list;
+
+}
+
 int main(void) {
 
 	printf("Loading game...\n");
 
+	srand(time(NULL));
+	
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		printf("Error initializing SDL: %s\n", SDL_GetError());
 		return 1;
@@ -48,31 +87,7 @@ int main(void) {
 	/*Create all of the objects required*/
 	texlist = addTexture(texlist, rend, PLAYER_TEX, "player",WIDTH/2,HEIGHT/2);
 
-	int randomx[ENEMYCOUNT];
-	int randomy[ENEMYCOUNT];
-
-	for (int i = 0; i < ENEMYCOUNT; i++) {
-
-		int rx = (rand() % (WIDTH - HUDHEIGHT + 1)) + HUDHEIGHT;
-		int ry = (rand() % (HEIGHT - HUDHEIGHT + 1)) + HUDHEIGHT;
-
-		int flag = 0;
-
-		for (int j = 0; j < ENEMYCOUNT; j++) {
-			if (randomx[j] == rx) {
-				flag = 1;
-			}
-			if (randomy[j] == ry) {
-				flag = 1;
-			}
-		}
-		
-		if (!flag) {
-			texlist = addTexture(texlist, rend, ENEMY_TEX, "enemy",rx,ry);
-		} else {
-			i-=1;
-		}
-	}
+	texlist = spawnEnemies(rend,texlist);
 
 	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
 	texlist = addTexture(texlist, rend, MAP_TEX,"bg",0,0);
