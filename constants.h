@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 
+/*Constants and includes for window.c*/
 #ifdef MAIN
 
 #include <SDL2/SDL_image.h>
@@ -31,6 +32,7 @@ const int ENEMYCOUNT = 2;
 
 #endif
 
+/*Constants and includes specific to input.h*/
 #ifdef INPUT
 #include <stdbool.h>
 
@@ -38,6 +40,7 @@ const int ENEMYCOUNT = 2;
 
 #endif
 
+/*Constants and includes specific to objects.h*/
 #ifdef OBJECTS
 
 #include <SDL2/SDL_image.h>
@@ -45,10 +48,11 @@ const int ENEMYCOUNT = 2;
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define POINTINC 10
 #define FONTLOC "assets/font.ttf"
 #define FONTSIZE 42 
+
 #endif

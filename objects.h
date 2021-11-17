@@ -41,6 +41,16 @@ SDL_Texture * makeTexture(SDL_Renderer *rend, SDL_Surface *surf) {
 
 }
 
+textures * getPlayer(textures *list) {
+
+	for (textures *temp = list; temp != NULL; temp = temp->next) {
+		if (strcmp(temp->texname,"player") == 0) {
+			return temp;
+		}
+	}
+
+}
+
 textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *texname, int x, int y) {
 
 	SDL_Surface *surf;
@@ -106,10 +116,9 @@ textObj createText(SDL_Renderer *rend, char *text, int x, int y) {
 
 }
 
-void updateHUD(textures *list, SDL_Renderer *rend, int HUDX, int HUDY) {
-
-	int points = getPoints(list);
-	int health = getHealth(list);
+void updateHUD(textures *list, SDL_Renderer *rend, int points, int health, int HUDX, int HUDY) {
+	
+	textures *player = getPlayer(list);
 	char statement[50];
 	sprintf(statement, "Health: %d | Points: %d",health,points);
 	textObj hud = createText(rend, statement,HUDX,HUDY);
@@ -136,46 +145,6 @@ void modRect(textures *list, char *texname, int dx, int dy, int angle) {
 
 }
 
-int getHealth(textures *list) {
-
-	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		if (strcmp(temp->texname,"player") == 0) {
-			return temp->health;
-		}
-	}
-
-}
-
-int getAngle(textures *list) {
-
-	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		if (strcmp(temp->texname,"player") == 0) {
-			return temp->angle;
-		}
-	}
-
-}
-
-int getPoints(textures *list) {
-
-	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		if (strcmp(temp->texname,"player") == 0) {
-			return temp->points;
-		}
-	}
-
-}
-
-SDL_Rect getRect(textures *list, char *texname) {
-
-	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		if (strcmp(temp->texname,texname) == 0) {
-			return temp->rect;
-		}
-	}
-
-}
-
 textures * destroyTextures(textures *list) {
 
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
@@ -189,17 +158,6 @@ textures * destroyTextures(textures *list) {
 		list = temp;
 	}
 	return list;
-
-}
-
-SDL_Texture * getTexture(textures *list, char *texname) {
-
-	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		if (temp->texname == texname) {
-			return temp->tex;
-		}
-	}
-	return NULL;
 
 }
 

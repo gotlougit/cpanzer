@@ -85,8 +85,8 @@ int main(void) {
 	while (!close) {
 		
 		/*Take input from the player and process it*/
-		int angle = getAngle(texlist);
-		printf("%d\n",angle);
+		textures *player = getPlayer(texlist);
+		int angle = player->angle;
 		inputResult input = getInput(SPEED, pause, angle);
 		close = input.value[2];
 		pause = input.value[3];
@@ -116,8 +116,8 @@ int main(void) {
 			modRect(texlist, "player", dx, dy, angle);
 
 			/*Updates all objects as per their functions*/
-			int px = getRect(texlist, "player").x;
-			int py = getRect(texlist, "player").y;
+			int px = getPlayer(texlist)->rect.x;
+			int py = getPlayer(texlist)->rect.y;
 			texlist = updateEnemy(texlist, ENEMYSPEED,px,py);
 
 			/*Checks for collisions*/
@@ -132,9 +132,12 @@ int main(void) {
 			/*Clears the renderer and redraws the objects*/
 			SDL_RenderClear(rend);
 			renderTextures(texlist, rend);
-			
+		
+			int points = player->points;
+			int health = player->health;
+
 			/*Updates the HUD*/
-			updateHUD(texlist, rend, HUDX, HUDY);
+			updateHUD(texlist, rend, points, health, HUDX, HUDY);
 
 			SDL_RenderPresent(rend);
 			
