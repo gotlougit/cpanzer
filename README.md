@@ -40,6 +40,8 @@ $ make
 
 - A better pause menu than the original Panzer
 
+- Enemy auto respawn when player kills some of them off
+
 ## Things to be left out
 
 - MySQL integration for keeping track of scores; this could be added in the form of SQLite but it seems unlikely.
