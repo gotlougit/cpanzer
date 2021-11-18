@@ -5,43 +5,17 @@
 #include "constants.h"
 
 int close = 0;
-int randomx[ENEMYCOUNT];
-int randomy[ENEMYCOUNT];
 textures *texlist = NULL;
 
-textures *spawnEnemies(SDL_Renderer *rend, textures *list) {
-	
-	int ec = 0;
+textures *spawnEnemy(SDL_Renderer *rend, textures *list) {
 
-	while (ec != ENEMYCOUNT) {
-
-		int rx = (rand() % (WIDTH + 1)) + COMPENSATION;
-		int ry = (rand() % (HEIGHT - HUDY + 1)) + COMPENSATION;
-
-		int flag = 0;
-
-		for (int i = 0; i < ENEMYCOUNT; i++) {
-			if (randomx[i] == rx || randomy[i] == ry) {
-				flag = 1;
-				break;
-			}
-		}
+	int rx = (rand() % (WIDTH + 1)) + COMPENSATION;
+	int ry = (rand() % (HUDY - 2*COMPENSATION + 1)) + COMPENSATION;
 		
-		if (!flag) {
-			list = addTexture(texlist, rend, ENEMY_TEX, "enemy",rx,ry);
-			randomx[ec] = rx;
-			randomy[ec] = ry;
-			ec++;
-		}
-	}
-
-	printf("randomx and randomy: \n");
-	for (int i = 0; i < ENEMYCOUNT; i++) {
-		printf("%d,%d\n",randomx[i], randomy[i]);
-	}
-
+	list = addTexture(texlist, rend, ENEMY_TEX, "enemy",rx,ry);
+	checkCollision(list);
+	printf("x: %d, y: %d\n",rx,ry);
 	return list;
-
 }
 
 int main(void) {
@@ -86,9 +60,9 @@ int main(void) {
 
 	/*Create all of the objects required*/
 	texlist = addTexture(texlist, rend, PLAYER_TEX, "player",WIDTH/2,HEIGHT/2);
-
-	texlist = spawnEnemies(rend,texlist);
-
+	for (int ec = 0; ec < ENEMYCOUNT; ec++) {	
+		texlist = spawnEnemy(rend,texlist);
+	}
 	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
 	texlist = addTexture(texlist, rend, MAP_TEX,"bg",0,0);
 

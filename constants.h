@@ -15,7 +15,7 @@
 #define HUD_TEX "assets/hud.png"
 #define ICON "assets/icon.png"
 #define WINNAME "CPanzer"
-#define ENEMYCOUNT 10 
+#define ENEMYCOUNT 2
 
 uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
 uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
@@ -28,7 +28,7 @@ const int HUDX = 0;
 const int HUDY = (HEIGHT-50);
 const int SPEED = 16;
 const int ENEMYSPEED = 1;
-const int COMPENSATION = 100;
+const int COMPENSATION = 120;
 
 #endif
 
