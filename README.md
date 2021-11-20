@@ -14,6 +14,8 @@ $ cd cpanzer/
 $ make
 ```
 
+To run the game, run ```./panzer```
+
 ## Implemented Features
 
 - Player's basic movement
@@ -30,6 +32,8 @@ $ make
 
 - Rotating player when they move a certain way
 
+- Enemy auto respawn when player kills some of them off
+
 ## Roadmap
 
 - Nozzle 
@@ -39,8 +43,6 @@ $ make
 - Base
 
 - A better pause menu than the original Panzer
-
-- Enemy auto respawn when player kills some of them off
 
 - Sound effects (look at sdlwiki/Tutorials-AudioStream.html)
 
