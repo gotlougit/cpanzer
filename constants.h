@@ -13,9 +13,10 @@
 #define ENEMY_TEX "assets/bot2.png"
 #define MAP_TEX "assets/snowmap.png"
 #define HUD_TEX "assets/hud.png"
+#define NOZZLE_TEX "assets/nozzle.png"
 #define ICON "assets/icon.png"
 #define WINNAME "CPanzer"
-#define ENEMYCOUNT 2
+#define ENEMYCOUNT 3
 
 uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
 uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;

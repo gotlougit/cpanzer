@@ -19,12 +19,12 @@ typedef struct textures {
 	SDL_Texture *tex;
 	SDL_Rect rect;
 	char *texname;
-	struct textures *next;
 	int oldx;
 	int oldy;
 	int health;
 	int points;
 	int angle;
+	struct textures *next;
 
 } textures;
 
@@ -119,7 +119,7 @@ textObj createText(SDL_Renderer *rend, char *text, int x, int y) {
 void updateHUD(textures *list, SDL_Renderer *rend, int points, int health, int HUDX, int HUDY) {
 	
 	textures *player = getPlayer(list);
-	char statement[50];
+	char statement[100];
 	sprintf(statement, "Health: %d | Points: %d",health,points);
 	textObj hud = createText(rend, statement,HUDX,HUDY);
 	SDL_RenderCopy(rend,hud.tex,NULL,&(hud.rect));
@@ -127,10 +127,20 @@ void updateHUD(textures *list, SDL_Renderer *rend, int points, int health, int H
 
 }
 
+int countEnemy(textures *list) {
+	int count = 0;
+	for (textures *iter = list; iter != NULL; iter = iter->next) {
+		if (!strcmp(iter->texname,"enemy")) {
+			count += 1;
+		}
+	}
+	return count;
+}
+
 void modRect(textures *list, char *texname, int dx, int dy, int angle) {
 
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		if (temp->texname == texname) {
+		if (!strcmp(temp->texname,texname)) {
 			temp->oldx = (temp->rect).x;
 			temp->oldy = (temp->rect).y;
 			(temp->rect).x += dx;
@@ -139,6 +149,27 @@ void modRect(textures *list, char *texname, int dx, int dy, int angle) {
 			if (temp->angle != angle) {
 				temp->angle = angle;
 			}
+
+		}
+	}
+
+}
+
+void modNozzle(textures *list, int angle) {
+
+	for (textures *temp = list; temp != NULL; temp = temp->next) {
+		if (!strcmp(temp->texname,"nozzle")) {
+			int nozzlew = temp->rect.w;
+			int nozzley = temp->rect.h;
+			textures *player = getPlayer(list);
+			int playercx = (player->rect).x + (player->rect).w/2;
+			int playercy = (player->rect).y + (player->rect).h/2;
+			temp->oldx = (temp->rect).x;
+			temp->oldy = (temp->rect).y;
+			(temp->rect).x = playercx - temp->rect.w/2;
+			(temp->rect).y = playercy - temp->rect.h/2;
+			temp->angle = getPlayer(list)->angle - 90;
+			break;
 
 		}
 	}
@@ -231,43 +262,27 @@ void checkBounds(textures *list, int WIDTH, int HEIGHT) {
 
 }
 
-int areCollidingY(textures *obj1, textures *obj2) {
+int areColliding(textures *obj1, textures *obj2) {
 
 	int y1 = (obj1->rect).y;
 	int h1 = (obj1->rect).h;
-	
-	y1 += h1/2;
-
-	int y2 = (obj2->rect).y;
-	int h2 = (obj2->rect).h;
-
-	y2 += h2/2;
-
-	int result = 0;
-
-	if (abs(y1-y2) <= (h1+h2)/2) {
-		result = 1;
-	}
-
-	return result;
-
-}
-
-int areCollidingX(textures *obj1, textures *obj2) {
-
 	int x1 = (obj1->rect).x;
 	int w1 = (obj1->rect).w;
 
 	x1 += w1/2;
+	y1 += h1/2;
 
 	int x2 = (obj2->rect).x;
 	int w2 = (obj2->rect).w;
+	int y2 = (obj2->rect).y;
+	int h2 = (obj2->rect).h;
 
 	x2 += w2/2;
+	y2 += h2/2;
 
 	int result = 0;
 
-	if (abs(x1-x2) <= (w1+w2)/2) {
+	if ((abs(y1-y2) <= (h1+h2)/2) && (abs(x1-x2) <= (w1+w2)/2)) {
 		result = 1;
 	}
 
@@ -277,36 +292,58 @@ int areCollidingX(textures *obj1, textures *obj2) {
 
 void collisionAction(textures *obj, char *collideswith) {
 
-	bool isenemy = strcmp(obj->texname,"enemy") == 0 && strcmp(collideswith,"player") == 0;
-	bool isplayer = strcmp(obj->texname,"player") == 0 && strcmp(collideswith,"enemy") == 0;
-
-	if (isplayer) {
-		obj->points+=POINTINC;
+	int flag = 0;
+	if (!strcmp(obj->texname,"player")) {
+		if (!strcmp(collideswith, "enemy")) {
+			obj->points += POINTINC;
+			
+		}
+		else if (!strcmp(collideswith, "nozzle")) {
+			flag = 1;
+		}
 	}
-	else if (isenemy) {
-		obj->health = 0;
-	} else {
+	else if (!strcmp(obj->texname,"enemy")) {
+		if (!strcmp(collideswith, "player")) {
+			obj->health = 0;
+		}
+		else if (!strcmp(collideswith, "enemy")) {
+			obj->health = 0;	
+		}
+	}
+	else if (!strcmp(obj->texname, "nozzle")) {
+		flag = 1;
+	}
+
+	if (!flag) {
 		(obj->rect).x = obj->oldx;
 		(obj->rect).y = obj->oldy;
 	}
 
 }
 
-void removeDead(textures *list) {
+textures * removeDead(textures *list) {
 
 	textures *obj= list->next;
 	textures *last = list;
-	while (obj != NULL) {
-		if (obj->health == 0) {
-			last->next = obj->next;
-			textures *temp = obj->next;	
-			SDL_DestroyTexture(obj->tex);
-			free(obj);
-			textures *obj = temp;
-		
+	if (list->health) {
+		while (obj != NULL) {
+			if (obj->health == 0) {
+				last->next = obj->next;
+				textures *temp = obj->next;	
+				SDL_DestroyTexture(obj->tex);
+				free(obj);
+				textures *obj = temp;
+			
+			}
+			obj = obj->next;
+			last = last->next;
 		}
-		obj = obj->next;
-		last = last->next;
+		return list;
+	} else {
+		textures *obj = list->next;
+		SDL_DestroyTexture(list->tex);
+		free(list);
+		return obj;
 	}
 
 }
@@ -314,17 +351,18 @@ void removeDead(textures *list) {
 void checkCollision(textures *list) {
 
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		if ((strcmp(temp->texname,"bg") != 0) && temp->health > 0) {
+		if (temp->health > 0) {
 
 			for (textures *obj = list; obj != NULL; obj = obj->next) {
-				if ( (obj != temp) && (strcmp(obj->texname,"bg") != 0) && obj->health > 0 )  {
+				if ( (obj != temp) && obj->health > 0 )  {
 		
-					int resultx = areCollidingX(obj, temp);		
-					int resulty = areCollidingY(obj,temp);
+					int result = areColliding(obj, temp);		
 
-					if (resultx && resulty) {
+					if (result) {
 						collisionAction(obj,temp->texname);
-						collisionAction(temp,obj->texname);
+						if (obj->health) {
+							collisionAction(temp,obj->texname);
+						}
 					}	
 				}
 			}

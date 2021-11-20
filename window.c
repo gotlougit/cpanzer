@@ -6,16 +6,9 @@
 
 int close = 0;
 textures *texlist = NULL;
+textures *implist = NULL;
 
-textures *spawnEnemy(SDL_Renderer *rend, textures *list) {
-
-	int rx = (rand() % (WIDTH + 1)) + COMPENSATION;
-	int ry = (rand() % (HUDY - 2*COMPENSATION + 1)) + COMPENSATION;
-		
-	list = addTexture(texlist, rend, ENEMY_TEX, "enemy",rx,ry);
-	checkCollision(list);
-	printf("x: %d, y: %d\n",rx,ry);
-	return list;
+void spawnEnemy(SDL_Renderer *rend, textures *list) {
 }
 
 int main(void) {
@@ -59,17 +52,17 @@ int main(void) {
 	SDL_FreeSurface(surf);
 
 	/*Create all of the objects required*/
-	texlist = addTexture(texlist, rend, PLAYER_TEX, "player",WIDTH/2,HEIGHT/2);
-	for (int ec = 0; ec < ENEMYCOUNT; ec++) {	
-		texlist = spawnEnemy(rend,texlist);
-	}
-	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
-	texlist = addTexture(texlist, rend, MAP_TEX,"bg",0,0);
 
+	texlist = addTexture(texlist, rend, NOZZLE_TEX, "nozzle", WIDTH/2,HEIGHT/2);
+	texlist = addTexture(texlist, rend, PLAYER_TEX, "player",WIDTH/2,HEIGHT/2);
+	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
+	implist = addTexture(implist, rend, MAP_TEX,"bg",0,0);
+	
 	/*Variables for pausing the game*/
 	int pause = 0;
 	int pauseRun = 0;
 
+	
 	/*Game loop*/
 	while (!close) {
 		
@@ -88,6 +81,9 @@ int main(void) {
 		if (pause && !pauseRun) {
 			pauseRun = 1;
 			printf("Paused the game\n");
+			SDL_RenderClear(rend);
+			/*Add pause menu code here*/
+			SDL_RenderPresent(rend);
 		}
 
 		else if (!pause) {
@@ -103,33 +99,44 @@ int main(void) {
 
 			/*Changes the coordinates of player texture*/
 			modRect(texlist, "player", dx, dy, angle);
-
+			modNozzle(texlist,angle);
+			
 			/*Updates all objects as per their functions*/
 			int px = getPlayer(texlist)->rect.x;
 			int py = getPlayer(texlist)->rect.y;
-			texlist = updateEnemy(texlist, ENEMYSPEED,px,py);
+			
+			for (int ec = countEnemy(texlist); ec < ENEMYCOUNT; ec++) {	
+	
+				int rx = (rand() % (WIDTH + 1)) + COMPENSATION;
+				int ry = (rand() % (HUDY - 2*COMPENSATION + 1)) + COMPENSATION;
+					
+				texlist = addTexture(texlist, rend, ENEMY_TEX, "enemy",rx,ry);
 
+			}
+	
+			texlist = updateEnemy(texlist, ENEMYSPEED,px,py);
+			
 			/*Checks for collisions*/
 			checkCollision(texlist);
 
 			/*Checks for any deaths; if there are any, remove from linked list*/
-			removeDead(texlist);
+			texlist = removeDead(texlist);
 
 			/*Checks objects if they aren't out of bounds*/
 			checkBounds(texlist, WIDTH, HEIGHT);
 
 			/*Clears the renderer and redraws the objects*/
 			SDL_RenderClear(rend);
+			renderTextures(implist, rend);
 			renderTextures(texlist, rend);
-		
+			
+			/*Updates the HUD*/
 			int points = player->points;
 			int health = player->health;
-
-			/*Updates the HUD*/
 			updateHUD(texlist, rend, points, health, HUDX, HUDY);
 
 			SDL_RenderPresent(rend);
-			
+		
 			/*Set framerate*/
 			SDL_Delay(1000/FRAMERATE);
 
@@ -139,6 +146,7 @@ int main(void) {
 
 	/*Clean up operations before quitting*/
 	destroyTextures(texlist);
+	destroyTextures(implist);
 	SDL_DestroyRenderer(rend);
 	SDL_DestroyWindow(win);
 	TTF_Quit();
