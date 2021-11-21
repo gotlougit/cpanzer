@@ -4,9 +4,10 @@
 
 typedef struct {
 	int value[OUTPUTS];
+	bool pause;
 } inputResult;
 
-inputResult getInput(int SPEED, int pause, int angle) {
+inputResult getInput(int SPEED, bool pause, int angle) {
 
 	int close = 0;
 	int dx = 0;
@@ -66,8 +67,8 @@ inputResult getInput(int SPEED, int pause, int angle) {
 	out.value[0] = dx;
 	out.value[1] = dy;
 	out.value[2] = close;
-	out.value[3] = pause;
-	out.value[4] = angle;
+	out.pause = pause;
+	out.value[3] = angle;
 	return out;
 
 }

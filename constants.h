@@ -27,7 +27,7 @@ const int FRAMERATE = 60;
 const float IMAGESCALE = 0.9;
 const int HUDX = 0;
 const int HUDY = (HEIGHT-50);
-const int SPEED = 16;
+const int SPEED = 17;
 const int ENEMYSPEED = 1;
 const int COMPENSATION = 120;
 

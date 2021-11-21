@@ -262,7 +262,7 @@ void checkBounds(textures *list, int WIDTH, int HEIGHT) {
 
 }
 
-int areColliding(textures *obj1, textures *obj2) {
+bool areColliding(textures *obj1, textures *obj2) {
 
 	int y1 = (obj1->rect).y;
 	int h1 = (obj1->rect).h;
@@ -280,10 +280,10 @@ int areColliding(textures *obj1, textures *obj2) {
 	x2 += w2/2;
 	y2 += h2/2;
 
-	int result = 0;
+	bool result = false;
 
 	if ((abs(y1-y2) <= (h1+h2)/2) && (abs(x1-x2) <= (w1+w2)/2)) {
-		result = 1;
+		result = true;
 	}
 
 	return result;
@@ -292,14 +292,14 @@ int areColliding(textures *obj1, textures *obj2) {
 
 void collisionAction(textures *obj, char *collideswith) {
 
-	int flag = 0;
+	bool flag = false;
 	if (!strcmp(obj->texname,"player")) {
 		if (!strcmp(collideswith, "enemy")) {
 			obj->points += POINTINC;
 			
 		}
 		else if (!strcmp(collideswith, "nozzle")) {
-			flag = 1;
+			flag = true;
 		}
 	}
 	else if (!strcmp(obj->texname,"enemy")) {
@@ -311,7 +311,7 @@ void collisionAction(textures *obj, char *collideswith) {
 		}
 	}
 	else if (!strcmp(obj->texname, "nozzle")) {
-		flag = 1;
+		flag = true;
 	}
 
 	if (!flag) {
@@ -356,7 +356,7 @@ void checkCollision(textures *list) {
 			for (textures *obj = list; obj != NULL; obj = obj->next) {
 				if ( (obj != temp) && obj->health > 0 )  {
 		
-					int result = areColliding(obj, temp);		
+					bool result = areColliding(obj, temp);		
 
 					if (result) {
 						collisionAction(obj,temp->texname);

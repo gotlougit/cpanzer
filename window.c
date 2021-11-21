@@ -8,9 +8,6 @@ int close = 0;
 textures *texlist = NULL;
 textures *implist = NULL;
 
-void spawnEnemy(SDL_Renderer *rend, textures *list) {
-}
-
 int main(void) {
 
 	printf("Loading game...\n");
@@ -55,23 +52,22 @@ int main(void) {
 
 	texlist = addTexture(texlist, rend, NOZZLE_TEX, "nozzle", WIDTH/2,HEIGHT/2);
 	texlist = addTexture(texlist, rend, PLAYER_TEX, "player",WIDTH/2,HEIGHT/2);
+	textures *player = getPlayer(texlist);
 	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
 	implist = addTexture(implist, rend, MAP_TEX,"bg",0,0);
 	
 	/*Variables for pausing the game*/
-	int pause = 0;
-	int pauseRun = 0;
-
+	bool pause = false;
+	bool pauseRun = false;
 	
 	/*Game loop*/
 	while (!close) {
 		
 		/*Take input from the player and process it*/
-		textures *player = getPlayer(texlist);
 		int angle = player->angle;
 		inputResult input = getInput(SPEED, pause, angle);
 		close = input.value[2];
-		pause = input.value[3];
+		pause = input.pause;
 
 		if (close) {
 			printf("Closing game..\n");
@@ -79,7 +75,7 @@ int main(void) {
 		}
 
 		if (pause && !pauseRun) {
-			pauseRun = 1;
+			pauseRun = true;
 			printf("Paused the game\n");
 			SDL_RenderClear(rend);
 			/*Add pause menu code here*/
@@ -89,21 +85,21 @@ int main(void) {
 		else if (!pause) {
 			
 			if (pauseRun) {
-				pauseRun = 0;
+				pauseRun = false;
 				printf("Unpaused game\n");
 			}
 
 			int dx = input.value[0];
 			int dy = input.value[1];
-			angle = input.value[4];
+			angle = input.value[3];
 
 			/*Changes the coordinates of player texture*/
 			modRect(texlist, "player", dx, dy, angle);
 			modNozzle(texlist,angle);
 			
 			/*Updates all objects as per their functions*/
-			int px = getPlayer(texlist)->rect.x;
-			int py = getPlayer(texlist)->rect.y;
+			int px = player->rect.x;
+			int py = player->rect.y;
 			
 			for (int ec = countEnemy(texlist); ec < ENEMYCOUNT; ec++) {	
 	
