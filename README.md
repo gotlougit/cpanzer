@@ -34,9 +34,9 @@ To run the game, run ```./panzer```
 
 - Enemy auto respawn when player kills some of them off
 
-## Roadmap
-
 - Nozzle 
+
+## Roadmap
 
 - Projectile
 
