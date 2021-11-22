@@ -35,7 +35,7 @@ const int COMPENSATION = 120;
 #ifdef INPUT
 
 #define OUTPUTS 5
-#define NOZZLESPEED 5
+#define NOZZLESPEED 7
 #define SPEED 17
 
 #endif

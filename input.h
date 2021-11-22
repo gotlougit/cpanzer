@@ -27,13 +27,6 @@ inputResult getInput(bool pause, int angle) {
 					case SDL_SCANCODE_P:
 						pause = !pause;
 						break;
-					case SDL_SCANCODE_E:
-						nozzleangle += NOZZLESPEED;
-						break;
-					case SDL_SCANCODE_Q:
-						nozzleangle -= NOZZLESPEED;
-						break;
-
 					default:
 						break;
 				}
@@ -62,6 +55,13 @@ inputResult getInput(bool pause, int angle) {
 						dx += SPEED;
 						angle = 90;
 						break;
+					case SDL_SCANCODE_E:
+						nozzleangle += NOZZLESPEED;
+						break;
+					case SDL_SCANCODE_Q:
+						nozzleangle -= NOZZLESPEED;
+						break;
+
 					default:
 						break;
 				}
