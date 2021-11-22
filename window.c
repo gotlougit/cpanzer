@@ -65,7 +65,7 @@ int main(void) {
 		
 		/*Take input from the player and process it*/
 		int angle = player->angle;
-		inputResult input = getInput(SPEED, pause, angle);
+		inputResult input = getInput(pause, angle);
 		close = input.value[2];
 		pause = input.pause;
 
@@ -92,10 +92,11 @@ int main(void) {
 			int dx = input.value[0];
 			int dy = input.value[1];
 			angle = input.value[3];
-
+			int nozzleangle = input.value[4];
+			
 			/*Changes the coordinates of player texture*/
-			modRect(texlist, "player", dx, dy, angle);
-			modNozzle(texlist,angle);
+			modPlayer(player, dx, dy, angle);
+			modNozzle(texlist, nozzleangle, player);
 			
 			/*Updates all objects as per their functions*/
 			int px = player->rect.x;
@@ -110,7 +111,7 @@ int main(void) {
 
 			}
 	
-			texlist = updateEnemy(texlist, ENEMYSPEED,px,py);
+			texlist = updateEnemy(texlist,px,py);
 			
 			/*Checks for collisions*/
 			checkCollision(texlist);

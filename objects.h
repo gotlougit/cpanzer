@@ -24,6 +24,7 @@ typedef struct textures {
 	int health;
 	int points;
 	int angle;
+	int oldangle;
 	struct textures *next;
 
 } textures;
@@ -77,6 +78,7 @@ textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *
 		temp->health = 100;
 		temp->points = 0;
 		temp->angle = 0;
+		temp->oldangle = 0;
 		temp->next = list;
 		list = temp;
 		return list;
@@ -118,7 +120,6 @@ textObj createText(SDL_Renderer *rend, char *text, int x, int y) {
 
 void updateHUD(textures *list, SDL_Renderer *rend, int points, int health, int HUDX, int HUDY) {
 	
-	textures *player = getPlayer(list);
 	char statement[100];
 	sprintf(statement, "Health: %d | Points: %d",health,points);
 	textObj hud = createText(rend, statement,HUDX,HUDY);
@@ -137,38 +138,33 @@ int countEnemy(textures *list) {
 	return count;
 }
 
-void modRect(textures *list, char *texname, int dx, int dy, int angle) {
+void modPlayer(textures *temp, int dx, int dy, int angle) {
 
-	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		if (!strcmp(temp->texname,texname)) {
-			temp->oldx = (temp->rect).x;
-			temp->oldy = (temp->rect).y;
-			(temp->rect).x += dx;
-			(temp->rect).y += dy;
+	temp->oldx = (temp->rect).x;
+	temp->oldy = (temp->rect).y;
+	(temp->rect).x += dx;
+	(temp->rect).y += dy;
 
-			if (temp->angle != angle) {
-				temp->angle = angle;
-			}
-
-		}
+	if (temp->angle != angle) {
+		temp->angle = angle;
 	}
+
 
 }
 
-void modNozzle(textures *list, int angle) {
+void modNozzle(textures *list, int nozzleangle, textures *player) {
 
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
 		if (!strcmp(temp->texname,"nozzle")) {
-			int nozzlew = temp->rect.w;
-			int nozzley = temp->rect.h;
-			textures *player = getPlayer(list);
+
 			int playercx = (player->rect).x + (player->rect).w/2;
 			int playercy = (player->rect).y + (player->rect).h/2;
 			temp->oldx = (temp->rect).x;
 			temp->oldy = (temp->rect).y;
 			(temp->rect).x = playercx - temp->rect.w/2;
 			(temp->rect).y = playercy - temp->rect.h/2;
-			temp->angle = getPlayer(list)->angle - 90;
+			temp->oldangle += nozzleangle;
+			temp->angle = player->angle - 90 + temp->oldangle;
 			break;
 
 		}
@@ -200,7 +196,7 @@ void renderTextures(textures *list, SDL_Renderer *rend) {
 
 }
 
-textures * updateEnemy(textures *list,int ENEMYSPEED, int px, int py) {
+textures * updateEnemy(textures *list, int px, int py) {
 
 	for (textures *iter = list; iter != NULL; iter = iter->next) {
 		if (strcmp(iter->texname,"enemy") == 0) {

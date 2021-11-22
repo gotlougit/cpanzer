@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <stdbool.h>
 
 /*Constants and includes for window.c*/
 #ifdef MAIN
@@ -16,28 +17,26 @@
 #define NOZZLE_TEX "assets/nozzle.png"
 #define ICON "assets/icon.png"
 #define WINNAME "CPanzer"
-#define ENEMYCOUNT 3
 
 uint32_t WINFLAGS = SDL_WINDOW_VULKAN;
 uint32_t RENDFLAGS = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
+const int ENEMYCOUNT = 3;
 const int WIDTH = 1000; 
 const int HEIGHT = 720;
 const int FRAMERATE = 60;
-const float IMAGESCALE = 0.9;
 const int HUDX = 0;
 const int HUDY = (HEIGHT-50);
-const int SPEED = 17;
-const int ENEMYSPEED = 1;
 const int COMPENSATION = 120;
 
 #endif
 
 /*Constants and includes specific to input.h*/
 #ifdef INPUT
-#include <stdbool.h>
 
 #define OUTPUTS 5
+#define NOZZLESPEED 5
+#define SPEED 17
 
 #endif
 
@@ -49,11 +48,11 @@ const int COMPENSATION = 120;
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
 
 #define POINTINC 10
 #define FONTLOC "assets/font.ttf"
 #define FONTSIZE 42 
+#define ENEMYSPEED 1
 
 #endif

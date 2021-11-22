@@ -7,11 +7,12 @@ typedef struct {
 	bool pause;
 } inputResult;
 
-inputResult getInput(int SPEED, bool pause, int angle) {
+inputResult getInput(bool pause, int angle) {
 
 	int close = 0;
 	int dx = 0;
 	int dy = 0;
+	int nozzleangle = 0;
 
 	SDL_Event event;
 
@@ -26,6 +27,13 @@ inputResult getInput(int SPEED, bool pause, int angle) {
 					case SDL_SCANCODE_P:
 						pause = !pause;
 						break;
+					case SDL_SCANCODE_E:
+						nozzleangle += NOZZLESPEED;
+						break;
+					case SDL_SCANCODE_Q:
+						nozzleangle -= NOZZLESPEED;
+						break;
+
 					default:
 						break;
 				}
@@ -69,6 +77,7 @@ inputResult getInput(int SPEED, bool pause, int angle) {
 	out.value[2] = close;
 	out.pause = pause;
 	out.value[3] = angle;
+	out.value[4] = nozzleangle;
 	return out;
 
 }
