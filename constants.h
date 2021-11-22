@@ -15,6 +15,7 @@
 #define MAP_TEX "assets/snowmap.png"
 #define HUD_TEX "assets/hud.png"
 #define NOZZLE_TEX "assets/nozzle.png"
+#define BASE_TEX "assets/base.png"
 #define ICON "assets/icon.png"
 #define WINNAME "CPanzer"
 

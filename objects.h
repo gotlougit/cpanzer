@@ -42,16 +42,6 @@ SDL_Texture * makeTexture(SDL_Renderer *rend, SDL_Surface *surf) {
 
 }
 
-textures * getPlayer(textures *list) {
-
-	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		if (strcmp(temp->texname,"player") == 0) {
-			return temp;
-		}
-	}
-
-}
-
 textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *texname, int x, int y) {
 
 	SDL_Surface *surf;
@@ -164,6 +154,9 @@ void modNozzle(textures *list, int nozzleangle, textures *player) {
 			(temp->rect).x = playercx - temp->rect.w/2;
 			(temp->rect).y = playercy - temp->rect.h/2;
 			temp->oldangle += nozzleangle;
+			if (temp->oldangle >= 360 || temp->oldangle <= -360) {
+				temp->oldangle = 0;
+			}
 			temp->angle = player->angle - 90 + temp->oldangle;
 			break;
 

@@ -50,9 +50,11 @@ int main(void) {
 
 	/*Create all of the objects required*/
 
-	texlist = addTexture(texlist, rend, NOZZLE_TEX, "nozzle", WIDTH/2,HEIGHT/2);
-	texlist = addTexture(texlist, rend, PLAYER_TEX, "player",WIDTH/2,HEIGHT/2);
-	textures *player = getPlayer(texlist);
+	texlist = addTexture(texlist, rend, NOZZLE_TEX, "nozzle", WIDTH/2-250,HEIGHT/2-250);
+	texlist = addTexture(texlist, rend, PLAYER_TEX, "player",WIDTH/2-250,HEIGHT/2-250);
+	textures *player = texlist;
+	texlist = addTexture(texlist, rend, BASE_TEX, "base", WIDTH/2, HEIGHT-HUDY);
+	textures *base = texlist;
 	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
 	implist = addTexture(implist, rend, MAP_TEX,"bg",0,0);
 	
@@ -99,8 +101,8 @@ int main(void) {
 			modNozzle(texlist, nozzleangle, player);
 			
 			/*Updates all objects as per their functions*/
-			int px = player->rect.x;
-			int py = player->rect.y;
+			int px = base->rect.x;
+			int py = base->rect.y;
 			
 			for (int ec = countEnemy(texlist); ec < ENEMYCOUNT; ec++) {	
 	
