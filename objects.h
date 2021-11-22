@@ -21,7 +21,7 @@ typedef struct textures {
 	char *texname;
 	int oldx;
 	int oldy;
-	int health;
+	float health;
 	int points;
 	int angle;
 	int oldangle;
@@ -287,6 +287,10 @@ void collisionAction(textures *obj, char *collideswith) {
 			obj->points += POINTINC;
 			
 		}
+		else if (!strcmp(collideswith, "base") && (obj->oldx == (obj->rect).x) && obj->oldy == (obj->rect).y) {
+			flag = true;
+			obj->health = 0;
+		}
 		else if (!strcmp(collideswith, "nozzle")) {
 			flag = true;
 		}
@@ -301,6 +305,12 @@ void collisionAction(textures *obj, char *collideswith) {
 	}
 	else if (!strcmp(obj->texname, "nozzle")) {
 		flag = true;
+	}
+	else if (!strcmp(obj->texname, "base")) {
+		if (!strcmp(collideswith,"enemy")) {
+			flag = true;
+			obj->health -= DAMAGE_RATE;
+		}
 	}
 
 	if (!flag) {

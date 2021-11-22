@@ -7,8 +7,9 @@ typedef struct {
 	bool pause;
 } inputResult;
 
-inputResult getInput(bool pause, int angle) {
+inputResult getInput(bool pause) {
 
+	int angle = 0;
 	int close = 0;
 	int dx = 0;
 	int dy = 0;

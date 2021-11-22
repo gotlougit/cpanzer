@@ -11,7 +11,8 @@ textures *implist = NULL;
 int main(void) {
 
 	printf("Loading game...\n");
-
+	
+	/*Initialize random seed*/
 	srand(time(NULL));
 	
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -66,8 +67,7 @@ int main(void) {
 	while (!close) {
 		
 		/*Take input from the player and process it*/
-		int angle = player->angle;
-		inputResult input = getInput(pause, angle);
+		inputResult input = getInput(pause);
 		close = input.value[2];
 		pause = input.pause;
 
@@ -93,7 +93,7 @@ int main(void) {
 
 			int dx = input.value[0];
 			int dy = input.value[1];
-			angle = input.value[3];
+			int angle = input.value[3];
 			int nozzleangle = input.value[4];
 			
 			/*Changes the coordinates of player texture*/
@@ -131,7 +131,7 @@ int main(void) {
 			
 			/*Updates the HUD*/
 			int points = player->points;
-			int health = player->health;
+			int health = base->health;
 			updateHUD(texlist, rend, points, health, HUDX, HUDY);
 
 			SDL_RenderPresent(rend);

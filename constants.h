@@ -55,5 +55,6 @@ const int COMPENSATION = 120;
 #define FONTLOC "assets/font.ttf"
 #define FONTSIZE 42 
 #define ENEMYSPEED 1
+#define DAMAGE_RATE 0.01
 
 #endif
