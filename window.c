@@ -76,6 +76,12 @@ int main(void) {
 			break;
 		}
 
+		if (base->health <= 0) {
+			printf("Game Over!\n");
+			printf("Your score was %d\n",player->points);
+			break;
+		}
+
 		if (pause && !pauseRun) {
 			pauseRun = true;
 			printf("Paused the game\n");
