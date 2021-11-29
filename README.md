@@ -36,11 +36,10 @@ To run the game, run ```./panzer```
 
 - Nozzle 
 
+- Base
 ## Roadmap
 
 - Projectile
-
-- Base
 
 - A better pause menu than the original Panzer
 
