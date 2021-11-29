@@ -8,7 +8,7 @@ This is a rewrite of [panzer](https://github.com/gotlougit/panzer) in C using [l
 
 Make sure you have the following in order to both build and run the game on your system:
 
-SDL2, SDL2_image, SDL2_ttf, SDL2_mixer (you can skip this for now if you want but it'll come in handy later)
+gcc, make, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer (you can skip this for now if you want but it'll come in handy later)
 
 These packages vary by Linux distro, so here are the common ones:
 
@@ -23,6 +23,8 @@ SDL2 SDL2_image SDL2_mixer SDL2_ttf SDL2-devel SDL2_mixer-devel SDL2_image-devel
 ```
 libsdl2 libsdl2-dev libsdl2-mixer libsdl2-mixer-dev libsdl2-image libsdl2-image-dev libsdl2-ttf libsdl2-ttf-dev
 ```
+
+Note that macOS and Windows aren't supported right now; all development work is focused on Linux. However, it is planned to add support for compiling to Windows. macOS may not be possible due to the lack of a Mac for development and testing purposes.
 
 ## Usage
 
