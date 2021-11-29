@@ -14,12 +14,14 @@ These packages vary by Linux distro, so here are the common ones:
 
 - Fedora:
 
-```SDL2 SDL2_image SDL2_mixer SDL2_ttf SDL2-devel SDL2_mixer-devel SDL2_image-devel SDL2_ttf-devel
+```
+SDL2 SDL2_image SDL2_mixer SDL2_ttf SDL2-devel SDL2_mixer-devel SDL2_image-devel SDL2_ttf-devel
 ```
 
 - Ubuntu:
 
-```libsdl2 libsdl2-dev libsdl2-mixer libsdl2-mixer-dev libsdl2-image libsdl2-image-dev libsdl2-ttf libsdl2-ttf-dev
+```
+libsdl2 libsdl2-dev libsdl2-mixer libsdl2-mixer-dev libsdl2-image libsdl2-image-dev libsdl2-ttf libsdl2-ttf-dev
 ```
 
 ## Usage
