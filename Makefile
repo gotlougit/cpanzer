@@ -1,7 +1,7 @@
 # A simple Makefile for compiling small SDL projects
 
 # set the compiler
-CC := gcc 
+CC := gcc
 
 # set the compiler flags
 CFLAGS := `sdl2-config --libs --cflags` -O2 --std=c99 -Wall -lSDL2_image -lSDL2_ttf -lm -ggdb3
