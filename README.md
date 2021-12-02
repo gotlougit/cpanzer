@@ -103,3 +103,5 @@ To run the game, run ```./panzer```
 - Rage mode
 
 - Map and player tank options
+
+- Fancy HUD with a health bar
