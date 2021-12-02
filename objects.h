@@ -135,7 +135,7 @@ void modPlayer(textures *temp, int dx, int dy, int angle) {
 	(temp->rect).x += dx;
 	(temp->rect).y += dy;
 
-	if (temp->angle != angle) {
+	if (temp->angle != angle && !(!dx && !dy)) {
 		temp->angle = angle;
 	}
 
