@@ -62,6 +62,8 @@ To run the game, run ```./panzer```
 
 - movement is not as smooth as in original panzer
 
+- player never stays rotated, it always comes back to original position
+
 ## Implemented Features
 
 - Player's basic movement
