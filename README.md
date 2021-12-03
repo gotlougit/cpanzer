@@ -100,4 +100,6 @@ To run the game, run ```./panzer```
 
 - Map and player tank options
 
-- Fancy HUD with a health bar
+- Fancy HUD with a health bara
+
+- Powerups, such as those for speed or getting more ammo
