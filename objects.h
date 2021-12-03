@@ -25,6 +25,7 @@ typedef struct textures {
 	int points;
 	int angle;
 	int oldangle;
+	int ammo;
 	struct textures *next;
 
 } textures;
@@ -69,6 +70,7 @@ textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *
 		temp->points = 0;
 		temp->angle = 0;
 		temp->oldangle = 0;
+		temp->ammo = 0;
 		temp->next = list;
 		list = temp;
 		return list;
@@ -108,10 +110,10 @@ textObj createText(SDL_Renderer *rend, char *text, int x, int y) {
 
 }
 
-void updateHUD(textures *list, SDL_Renderer *rend, int points, int health, int HUDX, int HUDY) {
+void updateHUD(textures *list, SDL_Renderer *rend, int points, int health, int ammo, int HUDX, int HUDY) {
 	
 	char statement[100];
-	sprintf(statement, "Health: %d | Points: %d",health,points);
+	sprintf(statement, "Health: %d | Points: %d | Ammo: %d",health,points,ammo);
 	textObj hud = createText(rend, statement,HUDX,HUDY);
 	SDL_RenderCopy(rend,hud.tex,NULL,&(hud.rect));
 	SDL_DestroyTexture(hud.tex);

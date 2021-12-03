@@ -54,6 +54,7 @@ int main(void) {
 	texlist = addTexture(texlist, rend, NOZZLE_TEX, "nozzle", WIDTH/2-250,HEIGHT/2-250);
 	texlist = addTexture(texlist, rend, PLAYER_TEX, "player",WIDTH/2-250,HEIGHT/2-250);
 	textures *player = texlist;
+	player->ammo = MAXAMMO;
 	texlist = addTexture(texlist, rend, BASE_TEX, "base", WIDTH/2, HEIGHT-HUDY);
 	textures *base = texlist;
 	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
@@ -101,11 +102,18 @@ int main(void) {
 			int dy = input.value[1];
 			int angle = input.value[3];
 			int nozzleangle = input.value[4];
-			
+			bool projectile = input.projectile;
+
 			/*Changes the coordinates of player texture*/
 			modPlayer(player, dx, dy, angle);
 			modNozzle(texlist, nozzleangle, player);
-			
+		
+			/*Launches projectiles if needed*/
+			if (projectile && player->ammo) {
+				printf("Launch projectile\n");
+				player->ammo -= 1;
+			}
+
 			/*Updates all objects as per their functions*/
 			int px = base->rect.x;
 			int py = base->rect.y;
@@ -138,7 +146,8 @@ int main(void) {
 			/*Updates the HUD*/
 			int points = player->points;
 			int health = base->health;
-			updateHUD(texlist, rend, points, health, HUDX, HUDY);
+			int ammo = player->ammo;
+			updateHUD(texlist, rend, points, health, ammo, HUDX, HUDY);
 
 			SDL_RenderPresent(rend);
 		

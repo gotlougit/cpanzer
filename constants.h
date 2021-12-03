@@ -15,6 +15,7 @@
 #define MAP_TEX "assets/snowmap.png"
 #define HUD_TEX "assets/hud.png"
 #define NOZZLE_TEX "assets/nozzle.png"
+#define PROJ_TEX "assets/projectile.png"
 #define BASE_TEX "assets/base.png"
 #define ICON "assets/icon.png"
 #define WINNAME "CPanzer"
@@ -29,6 +30,7 @@ const int FRAMERATE = 60;
 const int HUDX = 0;
 const int HUDY = (HEIGHT-50);
 const int COMPENSATION = 120;
+const int MAXAMMO = 10;
 
 #endif
 
