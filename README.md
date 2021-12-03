@@ -60,6 +60,8 @@ To run the game, run ```./panzer```
 
 - movement is not as smooth as in original panzer
 
+- enemies spawn in awkward positions, like inside base (again)
+
 ## Implemented Features
 
 - Player's basic movement
