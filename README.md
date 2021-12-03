@@ -52,9 +52,7 @@ To run the game, run ```./panzer```
 
 ## Observed bugs
 
-- valgrind reports ~6kb missing, it goes all the way back to the beginning of this game, so find bug and fix it
-
-- some enemies spawn inside base and then there's no fixing them
+- valgrind reports ~6kb missing, it goes all the way back to the beginning of this game, so find bug and fix it (UPDATE: this is probably an SDL issue, so there's nothing I can do here except create a bug report)
 
 - base and player start out at wrong positions
 
