@@ -121,6 +121,7 @@ void updateHUD(textures *list, SDL_Renderer *rend, int points, int health, int a
 }
 
 int countEnemy(textures *list) {
+
 	int count = 0;
 	for (textures *iter = list; iter != NULL; iter = iter->next) {
 		if (!strcmp(iter->texname,"enemy")) {
@@ -128,6 +129,7 @@ int countEnemy(textures *list) {
 		}
 	}
 	return count;
+
 }
 
 void modPlayer(textures *temp, int dx, int dy, int angle) {
@@ -144,7 +146,9 @@ void modPlayer(textures *temp, int dx, int dy, int angle) {
 
 }
 
-void modNozzle(textures *list, int nozzleangle, textures *player) {
+int modNozzle(textures *list, int nozzleangle, textures *player) {
+
+	int angle = 0;
 
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
 		if (!strcmp(temp->texname,"nozzle")) {
@@ -160,10 +164,13 @@ void modNozzle(textures *list, int nozzleangle, textures *player) {
 				temp->oldangle = 0;
 			}
 			temp->angle = player->angle - 90 + temp->oldangle;
+			angle = temp->angle;
 			break;
 
 		}
 	}
+
+	return angle;
 
 }
 
@@ -240,7 +247,9 @@ textures * updateProjectile(textures *list) {
 void checkBounds(textures *list, int WIDTH, int HEIGHT) {
 	
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		
+
+		bool flag = false;
+
 		int x = (temp->rect).x;
 		int y = (temp->rect).y;
 		int w = (temp->rect).w;
@@ -248,16 +257,25 @@ void checkBounds(textures *list, int WIDTH, int HEIGHT) {
 
 		if (x + w > WIDTH) {
 			x = WIDTH - w;
+			flag = true;
 		}
 		if (x < 0) {
 			x = 0;
+			flag = true;
 		}
 		if (y + h > HEIGHT) {
 			y = HEIGHT - h;
+			flag = true;
 		}
 		if (y < 0) {
 			y = 0;
+			flag = true;
 		}
+
+		if (!strcmp(temp->texname,"projectile") && flag) {
+			temp->health = 0;
+		}
+
 		temp->oldx = (temp->rect).x;
 		temp->oldy = (temp->rect).y;
 		(temp->rect).x = x;
@@ -294,41 +312,43 @@ bool areColliding(textures *obj1, textures *obj2) {
 
 }
 
-void collisionAction(textures *obj, char *collideswith) {
+void collisionAction(textures *obj, textures *otherobj) {
 
-	bool flag = false;
+	bool flag = true;
 	if (!strcmp(obj->texname,"player")) {
-		if (!strcmp(collideswith, "enemy")) {
+		if (!strcmp(otherobj->texname, "enemy")) {
 			obj->points += POINTINC;
-			
+			otherobj->health = 0;
+			flag = false;
 		}
-		else if (!strcmp(collideswith, "nozzle") || !strcmp(collideswith,"projectile")) {
-			flag = true;
+		else if (!strcmp(otherobj->texname, "base")) {
+			flag = false;
 		}
 	}
+	/*
 	else if (!strcmp(obj->texname,"enemy")) {
-		if (strcmp(obj->texname,"base")) {
-			obj->health = 0;
-		}
-		else if (!strcmp(collideswith, "base") && (obj->oldx == (obj->rect).x) && obj->oldy == (obj->rect).y) {
-			flag = true;
+		if (!strcmp(otherobj->texname, "base") && (obj->oldx == (obj->rect).x) && obj->oldy == (obj->rect).y) {
 			obj->health = 0;
 		}
 	}
-	else if (!strcmp(obj->texname, "nozzle")) {
-		flag = true;
-	}
+	*/
 	else if (!strcmp(obj->texname, "projectile")) {
 		obj->health = 0;
-		flag = true;
-	}
-	else if (!strcmp(obj->texname, "base")) {
-		if (!strcmp(collideswith,"enemy")) {
-			flag = true;
-			obj->health -= DAMAGE_RATE;
+		if (!strcmp(otherobj->texname, "enemy")) {
+			otherobj->health = 0;
 		}
 	}
-
+	else if (!strcmp(obj->texname, "base")) {
+		if (!strcmp(otherobj->texname,"enemy")) {
+			obj->health -= DAMAGE_RATE;
+			(otherobj->rect).x = otherobj->oldx;
+			(otherobj->rect).y = otherobj->oldy;
+			flag = false;
+		}
+	}
+	else if (!strcmp(obj->texname, otherobj->texname)) {
+		flag = false;
+	}
 	if (!flag) {
 		(obj->rect).x = obj->oldx;
 		(obj->rect).y = obj->oldy;
@@ -374,11 +394,11 @@ void checkCollision(textures *list) {
 					bool result = areColliding(obj, temp);		
 
 					if (result) {
-						collisionAction(obj,temp->texname);
+						collisionAction(obj,temp);
 						if (obj->health) {
-							collisionAction(temp,obj->texname);
+							collisionAction(temp, obj);
 						}
-					}	
+					}
 				}
 			}
 		}

@@ -106,18 +106,18 @@ int main(void) {
 
 			/*Changes the coordinates of player texture*/
 			modPlayer(player, dx, dy, angle);
-			modNozzle(texlist, nozzleangle, player);
+			int a = modNozzle(texlist, nozzleangle, player);
 		
 			/*Launches projectiles if needed*/
 			if (projectile && player->ammo) {
-				int x = player->rect.x + 10;
-				int y = player->rect.y + 10;
+				int x = player->rect.x + player->rect.w/2;
+				int y = player->rect.y - player->rect.h/2;
 				texlist = addTexture(texlist, rend, PROJ_TEX, "projectile", x,y);
-				texlist->angle = angle;
+				texlist->angle = a;
 				player->ammo -= 1;
 			}
 
-			/*Updates all objects as per their functions*/
+			/*Spawns enemies if needed*/
 			int px = base->rect.x;
 			int py = base->rect.y;
 			
@@ -130,6 +130,7 @@ int main(void) {
 
 			}
 	
+			/*Updates all objects as per their functions*/
 			texlist = updateEnemy(texlist,px,py);
 			texlist = updateProjectile(texlist);
 			
