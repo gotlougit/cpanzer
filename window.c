@@ -110,7 +110,10 @@ int main(void) {
 		
 			/*Launches projectiles if needed*/
 			if (projectile && player->ammo) {
-				printf("Launch projectile\n");
+				int x = player->rect.x + 10;
+				int y = player->rect.y + 10;
+				texlist = addTexture(texlist, rend, PROJ_TEX, "projectile", x,y);
+				texlist->angle = angle;
 				player->ammo -= 1;
 			}
 
@@ -128,6 +131,7 @@ int main(void) {
 			}
 	
 			texlist = updateEnemy(texlist,px,py);
+			texlist = updateProjectile(texlist);
 			
 			/*Checks for collisions*/
 			checkCollision(texlist);

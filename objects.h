@@ -223,6 +223,19 @@ textures * updateEnemy(textures *list, int px, int py) {
 	return list;
 }
 
+textures * updateProjectile(textures *list) {
+	
+	for (textures *temp = list; temp != NULL; temp = temp->next) {
+		if (!strcmp(temp->texname,"projectile")) {
+			temp->oldx = temp->rect.x;
+			temp->oldy = temp->rect.y;
+			temp->rect.x += PROJ_SPEED * cos(PI * temp->angle / 180);
+			temp->rect.y += PROJ_SPEED * sin(PI * temp->angle / 180);
+		}
+	}
+
+	return list;
+}
 
 void checkBounds(textures *list, int WIDTH, int HEIGHT) {
 	
@@ -289,23 +302,24 @@ void collisionAction(textures *obj, char *collideswith) {
 			obj->points += POINTINC;
 			
 		}
-		else if (!strcmp(collideswith, "base") && (obj->oldx == (obj->rect).x) && obj->oldy == (obj->rect).y) {
-			flag = true;
-			obj->health = 0;
-		}
-		else if (!strcmp(collideswith, "nozzle")) {
+		else if (!strcmp(collideswith, "nozzle") || !strcmp(collideswith,"projectile")) {
 			flag = true;
 		}
 	}
 	else if (!strcmp(obj->texname,"enemy")) {
-		if (!strcmp(collideswith, "player")) {
+		if (strcmp(obj->texname,"base")) {
 			obj->health = 0;
 		}
-		else if (!strcmp(collideswith, "enemy")) {
-			obj->health = 0;	
+		else if (!strcmp(collideswith, "base") && (obj->oldx == (obj->rect).x) && obj->oldy == (obj->rect).y) {
+			flag = true;
+			obj->health = 0;
 		}
 	}
 	else if (!strcmp(obj->texname, "nozzle")) {
+		flag = true;
+	}
+	else if (!strcmp(obj->texname, "projectile")) {
+		obj->health = 0;
 		flag = true;
 	}
 	else if (!strcmp(obj->texname, "base")) {

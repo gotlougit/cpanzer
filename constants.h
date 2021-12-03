@@ -49,6 +49,7 @@ const int MAXAMMO = 10;
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -57,6 +58,8 @@ const int MAXAMMO = 10;
 #define FONTLOC "assets/font.ttf"
 #define FONTSIZE 42 
 #define ENEMYSPEED 1
+#define PROJ_SPEED 1
 #define DAMAGE_RATE 0.01
+#define PI 3.14159265358979323846
 
 #endif
