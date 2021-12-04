@@ -84,13 +84,15 @@ To run the game, run ```./panzer```
 
 - Base
 
-## Roadmap
-
 - Projectile
+
+## Roadmap
 
 - A better pause menu than the original Panzer
 
 - Sound effects (look at sdlwiki/Tutorials-AudioStream.html)
+
+- Fixing bugs
 
 ## Things to be left out
 
