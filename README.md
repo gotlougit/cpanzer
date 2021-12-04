@@ -43,12 +43,13 @@ To run the game, run ```./panzer```
 
 ## Source code structure
 
-| File | Description |
+| File/Folder | Description |
 |---|---|
 | `constants.h` | Specifies constants like player speed, window name, dimensions etc. and also imports all the library functions we need |
 | `input.h` | Abstracts away all input and returns a custom struct detailing the effects of input (like how much should player move up/down or left/right, if player pressed pause button etc. |
-| `objects.h` | Creates the unfortunately named `textures` struct which contains all the information about each object (like player, object, base etc.) as well as related functions |
+| `objects.h` | Creates the unfortunately named `textures` struct which contains all the information about each object, like player, object, base etc, as well as related functions |
 | `window.c` | Renders the window and brings all this together |
+| `assets` | Contains all the sprites, font files etc. for the game |
 
 ## Observed bugs
 
@@ -109,3 +110,7 @@ To run the game, run ```./panzer```
 - Powerups, such as those for speed or getting more ammo
 
 - A debug mode which gives you God mode in the game
+
+## Font
+
+The font used in the game HUD is [Ubuntu Regular](https://design.ubuntu.com/font/)
