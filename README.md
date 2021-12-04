@@ -107,3 +107,5 @@ To run the game, run ```./panzer```
 - Fancy HUD with a health bar
 
 - Powerups, such as those for speed or getting more ammo
+
+- A debug mode which gives you God mode in the game
