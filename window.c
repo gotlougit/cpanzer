@@ -4,7 +4,7 @@
 #define MAIN 1
 #include "constants.h"
 
-int close = 0;
+bool close = false;
 textures *texlist = NULL;
 textures *implist = NULL;
 
@@ -69,7 +69,7 @@ int main(void) {
 		
 		/*Take input from the player and process it*/
 		inputResult input = getInput(pause);
-		close = input.value[2];
+		close = input.close;
 		pause = input.pause;
 
 		if (close) {
@@ -100,18 +100,18 @@ int main(void) {
 
 			int dx = input.value[0];
 			int dy = input.value[1];
-			int angle = input.value[3];
-			int nozzleangle = input.value[4];
+			int angle = input.value[2];
+			int nozzleangle = input.value[3];
 			bool projectile = input.projectile;
 
-			/*Changes the coordinates of player texture*/
+			/*Changes the coordinates of player*/
 			modPlayer(player, dx, dy, angle);
 			int a = modNozzle(texlist, nozzleangle, player);
 		
 			/*Launches projectiles if needed*/
 			if (projectile && player->ammo) {
-				int x = player->rect.x + player->rect.w/2;
-				int y = player->rect.y - player->rect.h/2;
+				int x = player->rect.x + player->rect.w/2 + ((player->rect.w/2) * cos(PI * a / 180));
+				int y = player->rect.y - player->rect.h/2 - ((player->rect.h/2) * sin(PI * a / 180));
 				texlist = addTexture(texlist, rend, PROJ_TEX, "projectile", x,y);
 				texlist->angle = a;
 				player->ammo -= 1;

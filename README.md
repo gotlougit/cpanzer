@@ -54,7 +54,7 @@ To run the game, run ```./panzer```
 
 - valgrind reports ~6kb missing, it goes all the way back to the beginning of this game, so find bug and fix it (UPDATE: this is probably an SDL issue, so there's nothing I can do here except create a bug report)
 
-- base and player start out at wrong positions
+- base and player start out at wrong positions (just gotta figure out coordinates)
 
 - nozzle freaks out sometimes whenever someone collides with it
 
@@ -102,6 +102,6 @@ To run the game, run ```./panzer```
 
 - Map and player tank options
 
-- Fancy HUD with a health bara
+- Fancy HUD with a health bar
 
 - Powerups, such as those for speed or getting more ammo

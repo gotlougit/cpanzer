@@ -1,5 +1,7 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
+#include <math.h>
+#define PI 3.14159265358979323846
 
 /*Constants and includes for window.c*/
 #ifdef MAIN
@@ -37,7 +39,7 @@ const int MAXAMMO = 10;
 /*Constants and includes specific to input.h*/
 #ifdef INPUT
 
-#define OUTPUTS 5
+#define OUTPUTS 4
 #define NOZZLESPEED 7
 #define SPEED 17
 
@@ -49,7 +51,6 @@ const int MAXAMMO = 10;
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -60,6 +61,5 @@ const int MAXAMMO = 10;
 #define ENEMYSPEED 1
 #define PROJ_SPEED 10
 #define DAMAGE_RATE 0.01
-#define PI 3.14159265358979323846
 
 #endif

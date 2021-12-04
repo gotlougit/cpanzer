@@ -6,12 +6,13 @@ typedef struct {
 	int value[OUTPUTS];
 	bool pause;
 	bool projectile;
+	bool close;
 } inputResult;
 
 inputResult getInput(bool pause) {
 
 	int angle = 0;
-	int close = 0;
+	bool close = false;
 	int dx = 0;
 	int dy = 0;
 	int nozzleangle = 0;
@@ -23,7 +24,7 @@ inputResult getInput(bool pause) {
 		switch (event.type) {
 				
 			case SDL_QUIT:
-				close = 1;
+				close = true;
 				break;
 			case SDL_KEYUP:
 				switch (event.key.keysym.scancode) {
@@ -39,7 +40,7 @@ inputResult getInput(bool pause) {
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.scancode) {
 					case SDL_SCANCODE_ESCAPE:
-						close = 1;
+						close = true;
 						break;
 					case SDL_SCANCODE_W:
 					case SDL_SCANCODE_UP:
@@ -79,11 +80,12 @@ inputResult getInput(bool pause) {
 	inputResult out;
 	out.value[0] = dx;
 	out.value[1] = dy;
-	out.value[2] = close;
+	out.value[2] = angle;
+	out.value[3] = nozzleangle;
+	out.close = close;
 	out.pause = pause;
 	out.projectile = projectile;
-	out.value[3] = angle;
-	out.value[4] = nozzleangle;
+
 	return out;
 
 }
