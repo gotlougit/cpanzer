@@ -110,9 +110,13 @@ int main(void) {
 		
 			/*Launches projectiles if needed*/
 			if (projectile && player->ammo) {
-				int x = player->rect.x + player->rect.w/2 + ((player->rect.w/2) * cos(PI * a / 180));
-				int y = player->rect.y - player->rect.h/2 - ((player->rect.h/2) * sin(PI * a / 180));
-				texlist = addTexture(texlist, rend, PROJ_TEX, "projectile", x,y);
+				float rx = ((player->rect.w) * cos(PI*a/180));
+				float ry = ((player->rect.h) * sin(PI*a/180));
+				int x = player->rect.x + player->rect.w/2 + rx;
+				int y = player->rect.y + player->rect.h/2 + ry;
+				texlist = addTexture(texlist, rend, PROJ_TEX, "projectile",x,y);
+				texlist->rect.x -= texlist->rect.w/2;
+				texlist->rect.y -= texlist->rect.h/2;
 				texlist->angle = a;
 				player->ammo -= 1;
 			}
@@ -149,10 +153,7 @@ int main(void) {
 			renderTextures(texlist, rend);
 			
 			/*Updates the HUD*/
-			int points = player->points;
-			int health = base->health;
-			int ammo = player->ammo;
-			updateHUD(texlist, rend, points, health, ammo, HUDX, HUDY);
+			updateHUD(texlist, rend, player->points, base->health, player->ammo, HUDX, HUDY);
 
 			SDL_RenderPresent(rend);
 		

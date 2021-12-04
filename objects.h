@@ -193,7 +193,9 @@ textures * destroyTextures(textures *list) {
 void renderTextures(textures *list, SDL_Renderer *rend) {
 
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		SDL_RenderCopyEx(rend, temp->tex, NULL, &(temp->rect), temp->angle, NULL, SDL_FLIP_NONE);
+		if (SDL_RenderCopyEx(rend, temp->tex, NULL, &(temp->rect), temp->angle, NULL, SDL_FLIP_NONE)) {
+			printf("Error rendering texture %s: %s\n", temp->texname, SDL_GetError());
+		}
 	}
 
 }
@@ -388,12 +390,10 @@ void checkCollision(textures *list) {
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
 		if (temp->health > 0) {
 
-			for (textures *obj = list; obj != NULL; obj = obj->next) {
-				if ( (obj != temp) && obj->health > 0 )  {
+			for (textures *obj = temp->next; obj != NULL; obj = obj->next) {
+				if ( obj->health > 0 )  {
 		
-					bool result = areColliding(obj, temp);		
-
-					if (result) {
+					if (areColliding(obj,temp)) {
 						collisionAction(obj,temp);
 						if (obj->health) {
 							collisionAction(temp, obj);
