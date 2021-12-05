@@ -29,7 +29,7 @@ libsdl2 libsdl2-dev libsdl2-mixer libsdl2-mixer-dev libsdl2-image libsdl2-image-
 
 Note that macOS and Windows aren't supported right now; all development work is focused on Linux. However, it is planned to add support for compiling to Windows. macOS may not be possible due to the lack of a Mac for development and testing purposes.
 
-## Usage
+## Compiling and Running the Game
 
 Clone this git repository, change directory into it and run ```make```
 
@@ -40,6 +40,20 @@ $ make
 ```
 
 To run the game, run ```./panzer```
+
+## Controls
+
+| Key | Action |
+|---|---|
+| W or up arrow key | Moves player up |
+| A or left arrow key | Moves player left |
+| S or down arrow key | Moves player down |
+| D or right arrow key | Moves player right |
+| Q | Rotates nozzle slightly counter-clockwise |
+| E | Rotates nozzle slightly clockwise |
+| Space bar | Fires a projectile in the direction the nozzle is facing |
+| P | Pauses the game |
+| Esc | Exits the game |
 
 ## Source code structure
 
