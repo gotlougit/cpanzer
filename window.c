@@ -55,8 +55,12 @@ int main(void) {
 	texlist = addTexture(texlist, rend, PLAYER_TEX, "player",WIDTH/2-250,HEIGHT/2-250);
 	textures *player = texlist;
 	player->ammo = MAXAMMO;
-	texlist = addTexture(texlist, rend, BASE_TEX, "base", WIDTH/2, HEIGHT-HUDY);
+	
+	texlist = addTexture(texlist, rend, BASE_TEX, "base", WIDTH/2, (HEIGHT)/2);
 	textures *base = texlist;
+	base->rect.x -= base->rect.w/2;
+	base->rect.y -= base->rect.h/2;
+
 	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
 	implist = addTexture(implist, rend, MAP_TEX,"bg",0,0);
 	
