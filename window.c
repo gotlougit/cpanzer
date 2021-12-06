@@ -60,6 +60,8 @@ int main(void) {
 	textures *base = texlist;
 	base->rect.x -= base->rect.w/2;
 	base->rect.y -= base->rect.h/2;
+	base->oldx = base->rect.x;
+	base->oldy = base->rect.y;
 
 	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
 	implist = addTexture(implist, rend, MAP_TEX,"bg",0,0);
