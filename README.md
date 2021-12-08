@@ -123,6 +123,8 @@ To run the game, run ```./panzer```
 
 - A debug mode which gives you God mode in the game
 
-## Font
+## Info about Assets Used in the Game
 
 The font used in the game HUD is [Ubuntu Regular](https://design.ubuntu.com/font/)
+
+The sprites are all taken from [panzer](https://github.com/gotlougit/panzer)
