@@ -274,7 +274,7 @@ void checkBounds(textures *list, int WIDTH, int HEIGHT) {
 			flag = true;
 		}
 
-		if (!strcmp(temp->texname,"projectile") && flag) {
+		if ((!strcmp(temp->texname,"projectile") || !strcmp(temp->texname,"enemy")) && flag) {
 			temp->health = 0;
 		}
 
