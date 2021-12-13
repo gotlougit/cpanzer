@@ -50,13 +50,12 @@ int main(void) {
 	SDL_FreeSurface(surf);
 
 	/*Create all of the objects required*/
-
 	texlist = addTexture(texlist, rend, NOZZLE_TEX, "nozzle", WIDTH/2-250,HEIGHT/2-250);
 	texlist = addTexture(texlist, rend, PLAYER_TEX, "player",WIDTH/2-250,HEIGHT/2-250);
 	textures *player = texlist;
 	player->ammo = MAXAMMO;
 	
-	texlist = addTexture(texlist, rend, BASE_TEX, "base", WIDTH/2, (HEIGHT)/2);
+	texlist = addTexture(texlist, rend, BASE_TEX, "base", WIDTH/2, HEIGHT/2);
 	textures *base = texlist;
 	base->rect.x -= base->rect.w/2;
 	base->rect.y -= base->rect.h/2;
@@ -72,22 +71,23 @@ int main(void) {
 	
 	/*Game loop*/
 	while (!close) {
-		
-		/*Take input from the player and process it*/
-		inputResult input = getInput(pause);
-		close = input.close;
-		pause = input.pause;
 
+		/*Close game if needed*/
 		if (close) {
 			printf("Closing game..\n");
 			break;
 		}
-
+		
 		if (base->health <= 0) {
 			printf("Game Over!\n");
 			printf("Your score was %d\n",player->points);
 			break;
 		}
+	
+		/*Take input from the player and process it*/
+		inputResult input = getInput(pause);
+		close = input.close;
+		pause = input.pause;
 
 		if (pause && !pauseRun) {
 			pauseRun = true;
@@ -127,37 +127,56 @@ int main(void) {
 				player->ammo -= 1;
 			}
 
-			/*Spawns enemies if needed*/
-			int px = base->rect.x;
-			int py = base->rect.y;
-			
-			for (int ec = countEnemy(texlist); ec < ENEMYCOUNT; ec++) {	
-	
-				int rx = (rand() % (WIDTH + 1)) + COMPENSATION;
-				int ry = (rand() % (HUDY - 2*COMPENSATION + 1)) + COMPENSATION;
-					
-				texlist = addTexture(texlist, rend, ENEMY_TEX, "enemy",rx,ry);
-
-			}
-	
 			/*Updates all objects as per their functions*/
-			texlist = updateEnemy(texlist,px,py);
-			texlist = updateProjectile(texlist);
+			updateEnemy(texlist,base->rect.x,base->rect.y);
+			updateProjectile(texlist);
+
+			/*Spawns enemies if needed*/
+			for (int ec = countEnemy(texlist); ec < ENEMYCOUNT; ec++) {	
+
+				int rx, ry;
+				int decide = rand() % 4;
+
+				switch (decide) {
+					case 0:
+						/*Upper left corner*/
+						rx = (rand() % (WIDTH/4 + 1)) + COMPENSATION;
+						ry = (rand() % ((HUDY - 2*COMPENSATION)/4 + 1)) + COMPENSATION;
+						break;
+					case 1:
+						/*Upper right corner*/
+						rx = (rand() % (WIDTH - WIDTH/4 + 1)) + COMPENSATION;
+						ry = (rand() % ((HUDY - 2*COMPENSATION)/4 + 1)) + COMPENSATION;
+						break;
+					case 2:
+						/*Lower left corner*/
+						rx = (rand() % (WIDTH/4 + 1)) + COMPENSATION;
+						ry = (rand() % (HEIGHT - HUDY - COMPENSATION/4 + 1)) + (HEIGHT - HUDY);
+						break;
+					default:
+						/*Lower right corner*/
+						rx = (rand() % (WIDTH - WIDTH/4 + 1)) + COMPENSATION;
+						ry = (rand() % (HEIGHT - HUDY - COMPENSATION/4 + 1)) + (HEIGHT - HUDY);
+						break;
+				}
+				texlist = addTexture(texlist, rend, ENEMY_TEX, "enemy",rx,ry);
+			}
 			
 			/*Checks for collisions*/
 			checkCollision(texlist);
+			/*Update points from projectile*/
+			updatePoints(texlist, player);
 
 			/*Checks for any deaths; if there are any, remove from linked list*/
 			texlist = removeDead(texlist);
-
 			/*Checks objects if they aren't out of bounds*/
 			checkBounds(texlist, WIDTH, HEIGHT);
-
+			
 			/*Clears the renderer and redraws the objects*/
 			SDL_RenderClear(rend);
 			renderTextures(implist, rend);
 			renderTextures(texlist, rend);
-			
+
 			/*Updates the HUD*/
 			updateHUD(texlist, rend, player->points, base->health, player->ammo, HUDX, HUDY);
 

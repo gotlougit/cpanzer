@@ -193,14 +193,16 @@ textures * destroyTextures(textures *list) {
 void renderTextures(textures *list, SDL_Renderer *rend) {
 
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
-		if (SDL_RenderCopyEx(rend, temp->tex, NULL, &(temp->rect), temp->angle, NULL, SDL_FLIP_NONE)) {
-			printf("Error rendering texture %s: %s\n", temp->texname, SDL_GetError());
+		if (temp->health) {
+			if (SDL_RenderCopyEx(rend, temp->tex, NULL, &(temp->rect), temp->angle, NULL, SDL_FLIP_NONE)) {
+				printf("Error rendering texture %s: %s\n", temp->texname, SDL_GetError());
+			}
 		}
 	}
 
 }
 
-textures * updateEnemy(textures *list, int px, int py) {
+void updateEnemy(textures *list, int px, int py) {
 
 	for (textures *iter = list; iter != NULL; iter = iter->next) {
 		if (strcmp(iter->texname,"enemy") == 0) {
@@ -229,11 +231,10 @@ textures * updateEnemy(textures *list, int px, int py) {
 		}
 	}
 	
-	return list;
 }
 
-textures * updateProjectile(textures *list) {
-	
+void updateProjectile(textures *list) {
+
 	for (textures *temp = list; temp != NULL; temp = temp->next) {
 		if (!strcmp(temp->texname,"projectile")) {
 			temp->oldx = temp->rect.x;
@@ -243,7 +244,16 @@ textures * updateProjectile(textures *list) {
 		}
 	}
 
-	return list;
+}
+
+void updatePoints(textures *list, textures *player) {
+	
+	for (textures *temp = list; temp != NULL; temp = temp->next) {
+		if (temp->points && !strcmp(temp->texname,"projectile")) {
+			player->points += temp->points;
+		}
+	}
+
 }
 
 void checkBounds(textures *list, int WIDTH, int HEIGHT) {
@@ -327,17 +337,12 @@ void collisionAction(textures *obj, textures *otherobj) {
 			flag = false;
 		}
 	}
-	/*
-	else if (!strcmp(obj->texname,"enemy")) {
-		if (!strcmp(otherobj->texname, "base") && (obj->oldx == (obj->rect).x) && obj->oldy == (obj->rect).y) {
-			obj->health = 0;
-		}
-	}
-	*/
 	else if (!strcmp(obj->texname, "projectile")) {
-		obj->health = 0;
 		if (!strcmp(otherobj->texname, "enemy")) {
 			otherobj->health = 0;
+			obj->points += POINTINC;
+			obj->health = 0;
+			flag = false;
 		}
 	}
 	else if (!strcmp(obj->texname, "base")) {
@@ -351,6 +356,7 @@ void collisionAction(textures *obj, textures *otherobj) {
 	else if (!strcmp(obj->texname, otherobj->texname)) {
 		flag = false;
 	}
+
 	if (!flag) {
 		(obj->rect).x = obj->oldx;
 		(obj->rect).y = obj->oldy;
@@ -364,13 +370,12 @@ textures * removeDead(textures *list) {
 	textures *last = list;
 	if (list->health) {
 		while (obj != NULL) {
-			if (obj->health == 0) {
+			if (!obj->health) {
 				last->next = obj->next;
 				textures *temp = obj->next;	
 				SDL_DestroyTexture(obj->tex);
 				free(obj);
 				textures *obj = temp;
-			
 			}
 			obj = obj->next;
 			last = last->next;
