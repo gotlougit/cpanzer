@@ -340,8 +340,18 @@ void collisionAction(textures *obj, textures *otherobj) {
 	else if (!strcmp(obj->texname, "projectile")) {
 		if (!strcmp(otherobj->texname, "enemy")) {
 			otherobj->health = 0;
-			obj->points += POINTINC;
+			obj->points = POINTINC;
 			obj->health = 0;
+			flag = false;
+		}
+	}
+	else if (!strcmp(obj->texname, "enemy")) {
+		if (!strcmp(otherobj->texname, "projectile")) {
+			obj->health = 0;
+			if (!(otherobj->points)) {
+				otherobj->points = POINTINC;
+			}
+			otherobj->health = 0;
 			flag = false;
 		}
 	}
