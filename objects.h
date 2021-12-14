@@ -327,7 +327,10 @@ bool areColliding(textures *obj1, textures *obj2) {
 void collisionAction(textures *obj, textures *otherobj) {
 
 	bool flag = true;
-	if (!strcmp(obj->texname,"player")) {
+	if (!strcmp(obj->texname, otherobj->texname)) {
+		flag = false;
+	}
+	else if (!strcmp(obj->texname,"player")) {
 		if (!strcmp(otherobj->texname, "enemy")) {
 			obj->points += POINTINC;
 			otherobj->health = 0;
@@ -362,9 +365,6 @@ void collisionAction(textures *obj, textures *otherobj) {
 			(otherobj->rect).y = otherobj->oldy;
 			flag = false;
 		}
-	}
-	else if (!strcmp(obj->texname, otherobj->texname)) {
-		flag = false;
 	}
 
 	if (!flag) {
