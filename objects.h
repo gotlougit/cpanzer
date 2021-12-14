@@ -326,48 +326,40 @@ bool areColliding(textures *obj1, textures *obj2) {
 
 void collisionAction(textures *obj, textures *otherobj) {
 
-	bool flag = true;
-	if (!strcmp(obj->texname, otherobj->texname)) {
-		flag = false;
-	}
-	else if (!strcmp(obj->texname,"player")) {
+	/*One liner evaluates if we need to make the objects stay where they are or not
+	 * Nozzle is an exception since it needs to stick with player at all times*/
+	bool flag = (!(!strcmp(obj->texname,"nozzle") || !strcmp(otherobj->texname, "nozzle")) || !strcmp(obj->texname, otherobj->texname));
+
+	/*Special cases for each object interaction*/
+
+	if (!strcmp(obj->texname,"player")) {
 		if (!strcmp(otherobj->texname, "enemy")) {
-			obj->points += POINTINC;
+			if (!otherobj->points) {
+				obj->points += POINTINC;
+			}
+			otherobj->points = POINTINC;
 			otherobj->health = 0;
-			flag = false;
-		}
-		else if (!strcmp(otherobj->texname, "base")) {
-			flag = false;
 		}
 	}
+
 	else if (!strcmp(obj->texname, "projectile")) {
 		if (!strcmp(otherobj->texname, "enemy")) {
 			otherobj->health = 0;
 			obj->points = POINTINC;
+			otherobj->points = POINTINC;
 			obj->health = 0;
-			flag = false;
 		}
 	}
-	else if (!strcmp(obj->texname, "enemy")) {
-		if (!strcmp(otherobj->texname, "projectile")) {
-			obj->health = 0;
-			if (!(otherobj->points)) {
-				otherobj->points = POINTINC;
-			}
-			otherobj->health = 0;
-			flag = false;
-		}
-	}
+
 	else if (!strcmp(obj->texname, "base")) {
 		if (!strcmp(otherobj->texname,"enemy")) {
 			obj->health -= DAMAGE_RATE;
 			(otherobj->rect).x = otherobj->oldx;
 			(otherobj->rect).y = otherobj->oldy;
-			flag = false;
 		}
 	}
 
-	if (!flag) {
+	if (flag) {
 		(obj->rect).x = obj->oldx;
 		(obj->rect).y = obj->oldy;
 	}
