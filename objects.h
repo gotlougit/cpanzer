@@ -297,16 +297,14 @@ void checkBounds(textures *list, int WIDTH, int HEIGHT) {
 }
 
 textures * findPredecessor(textures *list, textures *obj) {
-	
-	while (list != NULL) {
+
+	for (;list != NULL; list = list->next) {
 		if (list->next == obj) {
 			return list;
-		} else {
-			list = list->next;
 		}
 	}
 	return NULL;
-
+	
 }
 
 textures * removeDead(textures *list) {
@@ -371,6 +369,9 @@ void collisionAction(textures *obj, textures *otherobj) {
 
 	if (!strcmp(obj->texname,"player")) {
 		if (!strcmp(otherobj->texname, "enemy")) {
+			if (obj->ammo < MAXAMMO && !(rand() % AMMOCHANCE)) {
+				obj->ammo += 1;	
+			}
 			if (!otherobj->points) {
 				obj->points += POINTINC;
 			}

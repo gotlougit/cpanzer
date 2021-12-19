@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 #include <math.h>
+#define MAXAMMO 10
 #define PI 3.14159265358979323846
 
 /*Constants and includes for window.c*/
@@ -32,7 +33,6 @@ const int FRAMERATE = 60;
 const int HUDX = 0;
 const int HUDY = (HEIGHT-50);
 const int COMPENSATION = 120;
-const int MAXAMMO = 10;
 
 #endif
 
@@ -61,5 +61,6 @@ const int MAXAMMO = 10;
 #define ENEMYSPEED 1
 #define PROJ_SPEED 10
 #define DAMAGE_RATE 0.01
+#define AMMOCHANCE 2
 
 #endif
