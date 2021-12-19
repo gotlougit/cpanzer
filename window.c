@@ -130,7 +130,7 @@ int main(void) {
 			/*Updates all objects as per their functions*/
 			updateEnemy(texlist,base->rect.x,base->rect.y);
 			updateProjectile(texlist);
-
+			
 			/*Spawns enemies if needed*/
 			for (int ec = countEnemy(texlist); ec < ENEMYCOUNT; ec++) {	
 
@@ -140,25 +140,26 @@ int main(void) {
 				switch (decide) {
 					case 0:
 						/*Upper left corner*/
-						rx = (rand() % (WIDTH/4 + 1)) + COMPENSATION;
+						rx = (rand() % (WIDTH/4 + 1));
 						ry = (rand() % ((HUDY - 2*COMPENSATION)/4 + 1)) + COMPENSATION;
 						break;
 					case 1:
 						/*Upper right corner*/
-						rx = (rand() % (WIDTH - WIDTH/4 + 1)) + COMPENSATION;
+						rx = (rand() % (WIDTH - WIDTH/4 + 1)) + 3*COMPENSATION;
 						ry = (rand() % ((HUDY - 2*COMPENSATION)/4 + 1)) + COMPENSATION;
 						break;
 					case 2:
 						/*Lower left corner*/
-						rx = (rand() % (WIDTH/4 + 1)) + COMPENSATION;
+						rx = (rand() % (WIDTH/4 + 1));
 						ry = (rand() % (HEIGHT - HUDY - COMPENSATION/4 + 1)) + (HEIGHT - HUDY);
 						break;
 					default:
 						/*Lower right corner*/
-						rx = (rand() % (WIDTH - WIDTH/4 + 1)) + COMPENSATION;
+						rx = (rand() % (WIDTH - WIDTH/4 + 1)) + 3*COMPENSATION;
 						ry = (rand() % (HEIGHT - HUDY - COMPENSATION/4 + 1)) + (HEIGHT - HUDY);
 						break;
 				}
+
 				texlist = addTexture(texlist, rend, ENEMY_TEX, "enemy",rx,ry);
 			}
 			

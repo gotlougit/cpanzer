@@ -75,8 +75,6 @@ To run the game, run ```./panzer```
 
 - enemies spawn in awkward positions, like inside base (again)
 
-- sometimes the game crashes due to error in loading enemy or projectile textures, this is best triggered by firing a couple of projectiles very quickly at enemy (this is probably due to interactions between enemy and projectile)
-
 ## Implemented Features
 
 - Player's basic movement

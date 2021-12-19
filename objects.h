@@ -296,6 +296,43 @@ void checkBounds(textures *list, int WIDTH, int HEIGHT) {
 
 }
 
+textures * findPredecessor(textures *list, textures *obj) {
+	
+	while (list != NULL) {
+		if (list->next == obj) {
+			return list;
+		} else {
+			list = list->next;
+		}
+	}
+	return NULL;
+
+}
+
+textures * removeDead(textures *list) {
+
+	textures *obj= list;
+	if (list->health) {
+		while (obj != NULL) {
+			if (!obj->health) {
+				textures *last = findPredecessor(list,obj);
+				last->next = obj->next;
+				SDL_DestroyTexture(obj->tex);
+				free(obj);
+				textures *obj = last->next;
+			}
+			obj = obj->next;
+		}
+		return list;
+	} else {
+		textures *obj = list->next;
+		SDL_DestroyTexture(list->tex);
+		free(list);
+		return obj;
+	}
+
+}
+
 bool areColliding(textures *obj1, textures *obj2) {
 
 	int y1 = (obj1->rect).y;
@@ -327,7 +364,7 @@ bool areColliding(textures *obj1, textures *obj2) {
 void collisionAction(textures *obj, textures *otherobj) {
 
 	/*One liner evaluates if we need to make the objects stay where they are or not
-	 * Nozzle is an exception since it needs to stick with player at all times*/
+	 * Nozzle is an exception since it needs to stick with player at all times */
 	bool flag = (!(!strcmp(obj->texname,"nozzle") || !strcmp(otherobj->texname, "nozzle")) || !strcmp(obj->texname, otherobj->texname));
 
 	/*Special cases for each object interaction*/
@@ -343,51 +380,23 @@ void collisionAction(textures *obj, textures *otherobj) {
 	}
 
 	else if (!strcmp(obj->texname, "projectile")) {
+		obj->health = 0;
 		if (!strcmp(otherobj->texname, "enemy")) {
 			otherobj->health = 0;
 			obj->points = POINTINC;
 			otherobj->points = POINTINC;
-			obj->health = 0;
 		}
 	}
 
 	else if (!strcmp(obj->texname, "base")) {
 		if (!strcmp(otherobj->texname,"enemy")) {
 			obj->health -= DAMAGE_RATE;
-			(otherobj->rect).x = otherobj->oldx;
-			(otherobj->rect).y = otherobj->oldy;
 		}
 	}
 
 	if (flag) {
 		(obj->rect).x = obj->oldx;
 		(obj->rect).y = obj->oldy;
-	}
-
-}
-
-textures * removeDead(textures *list) {
-
-	textures *obj= list->next;
-	textures *last = list;
-	if (list->health) {
-		while (obj != NULL) {
-			if (!obj->health) {
-				last->next = obj->next;
-				textures *temp = obj->next;	
-				SDL_DestroyTexture(obj->tex);
-				free(obj);
-				textures *obj = temp;
-			}
-			obj = obj->next;
-			last = last->next;
-		}
-		return list;
-	} else {
-		textures *obj = list->next;
-		SDL_DestroyTexture(list->tex);
-		free(list);
-		return obj;
 	}
 
 }
