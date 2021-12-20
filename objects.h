@@ -1,5 +1,6 @@
 #define OBJECTS 1
 
+#include "audio.h"
 #include "constants.h"
 
 const SDL_Color WHITE = {255,255,255};
@@ -369,6 +370,7 @@ void collisionAction(textures *obj, textures *otherobj) {
 
 	if (!strcmp(obj->texname,"player")) {
 		if (!strcmp(otherobj->texname, "enemy")) {
+			playExplode();
 			if (obj->ammo < MAXAMMO && !(rand() % AMMOCHANCE)) {
 				obj->ammo += 1;	
 			}
@@ -383,6 +385,7 @@ void collisionAction(textures *obj, textures *otherobj) {
 	else if (!strcmp(obj->texname, "projectile")) {
 		obj->health = 0;
 		if (!strcmp(otherobj->texname, "enemy")) {
+			playExplode();
 			otherobj->health = 0;
 			obj->points = POINTINC;
 			otherobj->points = POINTINC;

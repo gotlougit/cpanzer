@@ -4,26 +4,44 @@
 
 void playEffect(char *effectName) {
 
-	uint8_t *effectBuffer;
-	uint32_t effectLen;
-	SDL_AudioSpec effectSpec;
+	int audioRate = 44100;
+	uint16_t audioFormat = AUDIO_S16SYS;
+	int audioChannels = 2;
+	int audioBuffers = 4096;
 
-	SDL_LoadWAV(effectName, &effectSpec, &effectBuffer, &effectLen);
-	SDL_AudioDeviceID deviceID = SDL_OpenAudioDevice(NULL, 0, &effectSpec, NULL, 0);
-
-	if (!SDL_QueueAudio(deviceID, effectBuffer, effectLen)) {
-		SDL_PauseAudioDevice(deviceID,0);
-	} else {
-		printf("Error playing sound effect %s: %s\n",effectName,SDL_GetError());
+	
+	if (Mix_OpenAudio(audioRate, audioFormat, audioChannels, audioBuffers)) {
+		printf("Error initializing audio: %s\n",Mix_GetError());
 	}
 
-	SDL_CloseAudioDevice(deviceID);
-	SDL_FreeWAV(effectBuffer);
+	Mix_Chunk *sound = NULL;
+	sound = Mix_LoadWAV(effectName);
+	if (sound == NULL) {
+		printf("Error loading sound effect %s: %s\n",effectName, Mix_GetError());
+	}
+
+	int channel = Mix_PlayChannel(-1, sound, 0);
+	if (channel == -1) {
+		printf("Error playing sound effect %s: %s\n",effectName, Mix_GetError());
+	}
+	
+	while (!Mix_Playing(channel)) {
+		Mix_FreeChunk(sound);
+		Mix_CloseAudio();
+	}
 
 }
 
-void testSound(void) {
+/* Convenient wrappers for playEffect */
 
-	playEffect(TESTAUDIO);
+void playInit(void) {
+	playEffect(INIT_SOUND);
+}
 
+void playExplode(void) {
+	playEffect(EXPLODE_SOUND);
+}
+
+void playFiring(void) {
+	playEffect(FIRING_SOUND);
 }

@@ -11,7 +11,6 @@ Make sure you have the following in order to both build and run the game on your
 ```
 gcc, make, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
 ```
-(you can skip the last one for now if you want but it'll come in handy later)
 
 These packages vary by Linux distro, so here are the common ones:
 
@@ -62,6 +61,7 @@ To run the game, run ```./panzer```
 | `constants.h` | Specifies constants like player speed, window name, dimensions etc. and also imports all the library functions we need |
 | `input.h` | Abstracts away all input and returns a custom struct detailing the effects of input (like how much should player move up/down or left/right, if player pressed pause button etc. |
 | `objects.h` | Creates the unfortunately named `textures` struct which contains all the information about each object, like player, object, base etc, as well as related functions |
+| `audio.h` | Abstracts away audio stuff in order to simply play sound effects |
 | `window.c` | Renders the window and brings all this together |
 | `assets` | Contains all the sprites, font files etc. for the game |
 
@@ -72,8 +72,6 @@ To run the game, run ```./panzer```
 - nozzle freaks out sometimes whenever someone collides with it
 
 - movement is not as smooth as in original panzer
-
-- enemies spawn in awkward positions, like inside base (again)
 
 ## Implemented Features
 
@@ -103,7 +101,7 @@ To run the game, run ```./panzer```
 
 - A better pause menu than the original Panzer
 
-- Sound effects (look at sdlwiki/Tutorials-AudioStream.html)
+- Sound effects
 
 - Fixing bugs
 

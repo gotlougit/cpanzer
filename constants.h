@@ -69,7 +69,10 @@ const int COMPENSATION = 120;
 #ifdef AUDIO
 
 #include <stdlib.h>
-#include <SDL2/SDL_audio.h>
-#define TESTAUDIO "assets/test.wav"
+#include <SDL2/SDL_mixer.h>
+
+#define INIT_SOUND "assets/CarStart.wav"
+#define EXPLODE_SOUND "assets/explode.wav"
+#define FIRING_SOUND "assets/Gunfire.wav"
 
 #endif

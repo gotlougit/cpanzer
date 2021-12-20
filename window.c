@@ -1,6 +1,5 @@
 #include "objects.h"
 #include "input.h"
-#include "audio.h"
 
 #define MAIN 1
 #include "constants.h"
@@ -70,6 +69,8 @@ int main(void) {
 	bool pause = false;
 	bool pauseRun = false;
 
+	playInit();
+
 	/*Game loop*/
 	while (!close) {
 
@@ -95,7 +96,6 @@ int main(void) {
 			printf("Paused the game\n");
 			SDL_RenderClear(rend);
 			/*Add pause menu code here*/
-			testSound();
 			SDL_RenderPresent(rend);
 		}
 
@@ -118,6 +118,7 @@ int main(void) {
 		
 			/*Launches projectiles if needed*/
 			if (projectile && player->ammo) {
+				playFiring();
 				float rx = ((player->rect.w) * cos(PI*a/180));
 				float ry = ((player->rect.h) * sin(PI*a/180));
 				int x = player->rect.x + player->rect.w/2 + rx;
