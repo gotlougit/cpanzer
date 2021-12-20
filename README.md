@@ -9,7 +9,7 @@ This is a rewrite of [panzer](https://github.com/gotlougit/panzer) in C using [l
 Make sure you have the following in order to both build and run the game on your system:
 
 ```
-gcc, make, SDL2, SDL2_image, SDL2_ttf
+gcc, make, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
 ```
 (you can skip the last one for now if you want but it'll come in handy later)
 
@@ -18,13 +18,13 @@ These packages vary by Linux distro, so here are the common ones:
 - Fedora:
 
 ```
-SDL2 SDL2_image SDL2_ttf SDL2-devel SDL2_image-devel SDL2_ttf-devel
+SDL2 SDL2_image SDL2_mixer SDL2_ttf SDL2-devel SDL2_mixer-devel SDL2_image-devel SDL2_ttf-devel
 ```
 
 - Ubuntu:
 
 ```
-libsdl2 libsdl2-dev libsdl2-image libsdl2-image-dev libsdl2-ttf libsdl2-ttf-dev
+libsdl2 libsdl2-dev libsdl2-mixer libsdl2-mixer-dev libsdl2-image libsdl2-image-dev libsdl2-ttf libsdl2-ttf-dev
 ```
 
 Note that macOS and Windows aren't supported right now; all development work is focused on Linux. However, it is planned to add support for compiling to Windows. macOS may not be possible due to the lack of a Mac for development and testing purposes.
@@ -72,6 +72,8 @@ To run the game, run ```./panzer```
 - nozzle freaks out sometimes whenever someone collides with it
 
 - movement is not as smooth as in original panzer
+
+- enemies spawn in awkward positions, like inside base (again)
 
 ## Implemented Features
 

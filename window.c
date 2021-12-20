@@ -1,5 +1,6 @@
 #include "objects.h"
 #include "input.h"
+#include "audio.h"
 
 #define MAIN 1
 #include "constants.h"
@@ -68,7 +69,7 @@ int main(void) {
 	/*Variables for pausing the game*/
 	bool pause = false;
 	bool pauseRun = false;
-	
+
 	/*Game loop*/
 	while (!close) {
 
@@ -94,6 +95,7 @@ int main(void) {
 			printf("Paused the game\n");
 			SDL_RenderClear(rend);
 			/*Add pause menu code here*/
+			testSound();
 			SDL_RenderPresent(rend);
 		}
 

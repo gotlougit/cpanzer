@@ -64,3 +64,12 @@ const int COMPENSATION = 120;
 #define AMMOCHANCE 2
 
 #endif
+
+/*Constants and includes specific to audio.h*/
+#ifdef AUDIO
+
+#include <stdlib.h>
+#include <SDL2/SDL_audio.h>
+#define TESTAUDIO "assets/test.wav"
+
+#endif

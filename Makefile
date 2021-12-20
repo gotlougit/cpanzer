@@ -4,9 +4,9 @@
 CC := gcc
 
 # set the compiler flags
-CFLAGS := `sdl2-config --libs --cflags` -O2 --std=c99 -Wall -lSDL2_image -lSDL2_ttf -lm -ggdb3
+CFLAGS := `sdl2-config --libs --cflags` --std=c99 -Wall -lSDL2_image -lSDL2_ttf -lm -ggdb3
 # add header files here
-HDRS := objects.h input.h constants.h
+HDRS := objects.h input.h constants.h audio.h
 
 # add source files here
 SRCS := window.c #file-name.c
