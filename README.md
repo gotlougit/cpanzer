@@ -97,11 +97,11 @@ To run the game, run ```./panzer```
 
 - Projectile
 
+- Sound effects
+
 ## Roadmap
 
 - A better pause menu than the original Panzer
-
-- Sound effects
 
 - Fixing bugs
 
