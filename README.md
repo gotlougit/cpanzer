@@ -63,7 +63,7 @@ To run the game, run ```./panzer```
 | `objects.h` | Creates the unfortunately named `textures` struct which contains all the information about each object, like player, object, base etc, as well as related functions |
 | `audio.h` | Abstracts away audio stuff in order to simply play sound effects |
 | `window.c` | Renders the window and brings all this together |
-| `assets` | Contains all the sprites, font files etc. for the game |
+| `assets/` | Contains all the sprites, font files etc. for the game |
 
 ## Observed bugs
 
