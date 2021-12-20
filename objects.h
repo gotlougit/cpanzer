@@ -395,6 +395,11 @@ void collisionAction(textures *obj, textures *otherobj) {
 		}
 	}
 
+	else if (!strcmp(obj->texname, "enemy") && !strcmp(otherobj->texname, "enemy")) {
+		obj->health = 100;
+		otherobj->health = 0;
+	}
+
 	if (flag) {
 		(obj->rect).x = obj->oldx;
 		(obj->rect).y = obj->oldy;

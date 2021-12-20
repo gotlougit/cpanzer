@@ -134,29 +134,26 @@ int main(void) {
 			/*Spawns enemies if needed*/
 			for (int ec = countEnemy(texlist); ec < ENEMYCOUNT; ec++) {	
 
-				int rx, ry;
+				int rx = (rand() % (WIDTH/4 + 1));
+				int ry = (rand() % ((HUDY - 2*COMPENSATION)/4 + 1)) + COMPENSATION;
 				int decide = rand() % 4;
 
 				switch (decide) {
-					case 0:
-						/*Upper left corner*/
-						rx = (rand() % (WIDTH/4 + 1));
-						ry = (rand() % ((HUDY - 2*COMPENSATION)/4 + 1)) + COMPENSATION;
-						break;
 					case 1:
 						/*Upper right corner*/
-						rx = (rand() % (WIDTH - WIDTH/4 + 1)) + 3*COMPENSATION;
-						ry = (rand() % ((HUDY - 2*COMPENSATION)/4 + 1)) + COMPENSATION;
+						rx = WIDTH - rx;
 						break;
 					case 2:
 						/*Lower left corner*/
-						rx = (rand() % (WIDTH/4 + 1));
-						ry = (rand() % (HEIGHT - HUDY - COMPENSATION/4 + 1)) + (HEIGHT - HUDY);
+						ry = HEIGHT - ry - COMPENSATION;
+						break;
+					case 3:
+						/*Lower right corner*/
+						rx = WIDTH - rx;
+						ry = HEIGHT - ry - COMPENSATION;
 						break;
 					default:
-						/*Lower right corner*/
-						rx = (rand() % (WIDTH - WIDTH/4 + 1)) + 3*COMPENSATION;
-						ry = (rand() % (HEIGHT - HUDY - COMPENSATION/4 + 1)) + (HEIGHT - HUDY);
+						/*Upper left corner*/
 						break;
 				}
 
