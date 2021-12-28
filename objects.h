@@ -8,7 +8,10 @@ const SDL_Color RED = {255,0,0};
 const SDL_Color GREEN = {0,255,0};
 const SDL_Color BLUE = {0,0,255};
 
-SDL_Color color = GREEN;
+SDL_Color color = WHITE;
+
+int font_x = 0;
+int font_y = 0;
 
 typedef struct textures {
 
@@ -91,6 +94,13 @@ textures * addProjectile(textures *list, SDL_Renderer *rend, textures *player, c
 
 }
 
+void setTextBaseCoords(int x, int y) {
+
+	font_x = x;
+	font_y = y;
+
+}
+
 void createText(SDL_Renderer *rend, char *text, int x, int y) {
 
 	TTF_Font *font = TTF_OpenFont(FONTLOC,FONTSIZE);
@@ -118,6 +128,12 @@ void createText(SDL_Renderer *rend, char *text, int x, int y) {
 	SDL_RenderCopy(rend, tex, NULL, &rect);
 	SDL_DestroyTexture(tex);
 
+}
+
+void writeText(SDL_Renderer *rend, char *text) {
+	
+	createText(rend, text, font_x, font_y);
+	font_y += FONTSIZE;
 }
 
 int countEnemy(textures *list) {

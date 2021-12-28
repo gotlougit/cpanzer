@@ -132,9 +132,10 @@ int main(void) {
 			printf("Paused the game\n");
 			SDL_RenderClear(rend);
 			/*The pause menu code here*/
-			createText(rend, RESUME_MESSAGE, HEIGHT/2 - 150, 150);
-			createText(rend, EXIT_MESSAGE, HEIGHT/2 - 150,300);
-			createText(rend, EXIT2_MESSAGE, HEIGHT/2 - 150, 450);
+			setTextBaseCoords(HEIGHT/2 - 150, 150);
+			writeText(rend, RESUME_MESSAGE);
+			writeText(rend, EXIT_MESSAGE);
+			writeText(rend, EXIT2_MESSAGE);
 			SDL_RenderPresent(rend);
 		}
 
@@ -188,7 +189,7 @@ int main(void) {
 
 			/*Updates the HUD*/
 			char statement[100];
-			sprintf(statement, "Health: %d | Points: %d | Ammo: %d",base->health,player->points,player->ammo);
+			sprintf(statement, "Health: %0.0f | Points: %d | Ammo: %d",base->health,player->points,player->ammo);
 			createText(rend, statement, HUDX, HUDY);
 
 			SDL_RenderPresent(rend);
