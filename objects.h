@@ -8,12 +8,7 @@ const SDL_Color RED = {255,0,0};
 const SDL_Color GREEN = {0,255,0};
 const SDL_Color BLUE = {0,0,255};
 
-SDL_Color color = WHITE;
-
-typedef struct {
-	SDL_Texture *tex;
-	SDL_Rect rect;
-} textObj;
+SDL_Color color = GREEN;
 
 typedef struct textures {
 
@@ -79,7 +74,24 @@ textures * addTexture(textures *list, SDL_Renderer *rend, char *imageloc, char *
 
 }
 
-textObj createText(SDL_Renderer *rend, char *text, int x, int y) {
+textures * addProjectile(textures *list, SDL_Renderer *rend, textures *player, char * PROJ_TEX, int angle) {
+
+	playFiring();
+	float rx = ((player->rect.w) * cos(PI*angle/180));
+	float ry = ((player->rect.h) * sin(PI*angle/180));
+	int x = player->rect.x + player->rect.w/2 + rx;
+	int y = player->rect.y + player->rect.h/2 + ry;
+	list = addTexture(list, rend, PROJ_TEX, "projectile",x,y);
+	list->rect.x -= list->rect.w/2;
+	list->rect.y -= list->rect.h/2;
+	list->angle = angle;
+	player->ammo -= 1;
+	
+	return list;
+
+}
+
+void createText(SDL_Renderer *rend, char *text, int x, int y) {
 
 	TTF_Font *font = TTF_OpenFont(FONTLOC,FONTSIZE);
 	if (font == NULL) {
@@ -101,23 +113,10 @@ textObj createText(SDL_Renderer *rend, char *text, int x, int y) {
 	rect.w = textwidth; 
 	rect.h = textheight;
 
-	textObj out;
-	out.tex = tex;
-	out.rect = rect;
-
 	TTF_CloseFont(font);
 
-	return out;
-
-}
-
-void updateHUD(textures *list, SDL_Renderer *rend, int points, int health, int ammo, int HUDX, int HUDY) {
-	
-	char statement[100];
-	sprintf(statement, "Health: %d | Points: %d | Ammo: %d",health,points,ammo);
-	textObj hud = createText(rend, statement,HUDX,HUDY);
-	SDL_RenderCopy(rend,hud.tex,NULL,&(hud.rect));
-	SDL_DestroyTexture(hud.tex);
+	SDL_RenderCopy(rend, tex, NULL, &rect);
+	SDL_DestroyTexture(tex);
 
 }
 
@@ -206,7 +205,7 @@ void renderTextures(textures *list, SDL_Renderer *rend) {
 void updateEnemy(textures *list, int px, int py) {
 
 	for (textures *iter = list; iter != NULL; iter = iter->next) {
-		if (strcmp(iter->texname,"enemy") == 0) {
+		if (!strcmp(iter->texname,"enemy")) {
 			int ex = (iter->rect).x;
 			int ey = (iter->rect).y;
 

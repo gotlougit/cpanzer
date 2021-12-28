@@ -4,6 +4,44 @@
 #define MAIN 1
 #include "constants.h"
 
+typedef struct {
+	int x;
+	int y;
+} randomStart;
+
+randomStart getRandomCoords(void) {
+
+	int rx = (rand() % (WIDTH/4 + 1));
+	int ry = (rand() % ((HUDY - 2*COMPENSATION)/4 + 1)) + COMPENSATION;
+	int decide = rand() % 4;
+
+	switch (decide) {
+		case 1:
+			/*Upper right corner*/
+			rx = WIDTH - rx;
+			break;
+		case 2:
+			/*Lower left corner*/
+			ry = HEIGHT - ry - COMPENSATION;
+			break;
+		case 3:
+			/*Lower right corner*/
+			rx = WIDTH - rx;
+			ry = HEIGHT - ry - COMPENSATION;
+			break;
+		default:
+			/*Upper left corner*/
+			break;
+	}
+
+	randomStart out;
+	out.x = rx;
+	out.y = ry;
+	
+	return out;
+
+}
+
 bool close = false;
 textures *texlist = NULL;
 textures *implist = NULL;
@@ -15,12 +53,12 @@ int main(void) {
 	/*Initialize random seed*/
 	srand(time(NULL));
 	
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+	if (SDL_Init(SDL_INIT_EVERYTHING)) {
 		printf("Error initializing SDL: %s\n", SDL_GetError());
 		return 1;
 	}
 
-	if (TTF_Init() != 0) {
+	if (TTF_Init()) {
 		printf("Error initializing SDL_TTF: %s\n", TTF_GetError());
 		return 1;
 	}
@@ -59,8 +97,6 @@ int main(void) {
 	textures *base = texlist;
 	base->rect.x -= base->rect.w/2;
 	base->rect.y -= base->rect.h/2;
-	base->oldx = base->rect.x;
-	base->oldy = base->rect.y;
 
 	texlist = addTexture(texlist, rend, HUD_TEX, "hud", WIDTH,HEIGHT);
 	implist = addTexture(implist, rend, MAP_TEX,"bg",0,0);
@@ -95,7 +131,10 @@ int main(void) {
 			pauseRun = true;
 			printf("Paused the game\n");
 			SDL_RenderClear(rend);
-			/*Add pause menu code here*/
+			/*The pause menu code here*/
+			createText(rend, RESUME_MESSAGE, HEIGHT/2 - 150, 150);
+			createText(rend, EXIT_MESSAGE, HEIGHT/2 - 150,300);
+			createText(rend, EXIT2_MESSAGE, HEIGHT/2 - 150, 450);
 			SDL_RenderPresent(rend);
 		}
 
@@ -118,16 +157,7 @@ int main(void) {
 		
 			/*Launches projectiles if needed*/
 			if (projectile && player->ammo) {
-				playFiring();
-				float rx = ((player->rect.w) * cos(PI*a/180));
-				float ry = ((player->rect.h) * sin(PI*a/180));
-				int x = player->rect.x + player->rect.w/2 + rx;
-				int y = player->rect.y + player->rect.h/2 + ry;
-				texlist = addTexture(texlist, rend, PROJ_TEX, "projectile",x,y);
-				texlist->rect.x -= texlist->rect.w/2;
-				texlist->rect.y -= texlist->rect.h/2;
-				texlist->angle = a;
-				player->ammo -= 1;
+				texlist = addProjectile(texlist, rend, player, PROJ_TEX, a);
 			}
 
 			/*Updates all objects as per their functions*/
@@ -136,31 +166,9 @@ int main(void) {
 			
 			/*Spawns enemies if needed*/
 			for (int ec = countEnemy(texlist); ec < ENEMYCOUNT; ec++) {	
-
-				int rx = (rand() % (WIDTH/4 + 1));
-				int ry = (rand() % ((HUDY - 2*COMPENSATION)/4 + 1)) + COMPENSATION;
-				int decide = rand() % 4;
-
-				switch (decide) {
-					case 1:
-						/*Upper right corner*/
-						rx = WIDTH - rx;
-						break;
-					case 2:
-						/*Lower left corner*/
-						ry = HEIGHT - ry - COMPENSATION;
-						break;
-					case 3:
-						/*Lower right corner*/
-						rx = WIDTH - rx;
-						ry = HEIGHT - ry - COMPENSATION;
-						break;
-					default:
-						/*Upper left corner*/
-						break;
-				}
-
-				texlist = addTexture(texlist, rend, ENEMY_TEX, "enemy",rx,ry);
+				
+				randomStart random = getRandomCoords();	
+				texlist = addTexture(texlist, rend, ENEMY_TEX, "enemy",random.x,random.y);
 			}
 			
 			/*Checks for collisions*/
@@ -179,7 +187,9 @@ int main(void) {
 			renderTextures(texlist, rend);
 
 			/*Updates the HUD*/
-			updateHUD(texlist, rend, player->points, base->health, player->ammo, HUDX, HUDY);
+			char statement[100];
+			sprintf(statement, "Health: %d | Points: %d | Ammo: %d",base->health,player->points,player->ammo);
+			createText(rend, statement, HUDX, HUDY);
 
 			SDL_RenderPresent(rend);
 		

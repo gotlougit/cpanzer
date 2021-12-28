@@ -19,7 +19,7 @@ void playEffect(char *effectName) {
 	if (sound == NULL) {
 		printf("Error loading sound effect %s: %s\n",effectName, Mix_GetError());
 	}
-
+	
 	int channel = Mix_PlayChannel(-1, sound, 0);
 	if (channel == -1) {
 		printf("Error playing sound effect %s: %s\n",effectName, Mix_GetError());
@@ -32,16 +32,22 @@ void playEffect(char *effectName) {
 
 }
 
-/* Convenient wrappers for playEffect */
+/* Convenient wrappers for playEffect() */
 
 void playInit(void) {
-	playEffect(INIT_SOUND);
+	if (AUDIO_ENABLE) {
+		playEffect(INIT_SOUND);
+	}
 }
 
 void playExplode(void) {
-	playEffect(EXPLODE_SOUND);
+	if (AUDIO_ENABLE) {
+		playEffect(EXPLODE_SOUND);
+	}
 }
 
 void playFiring(void) {
-	playEffect(FIRING_SOUND);
+	if (AUDIO_ENABLE) {
+		playEffect(FIRING_SOUND);
+	}
 }
