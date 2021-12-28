@@ -99,9 +99,13 @@ To run the game, run ```./panzer```
 
 - Sound effects
 
+- A better pause menu than the original Panzer
+
 ## Roadmap
 
-- A better pause menu than the original Panzer
+- Cleaning up code
+
+- Adding comments etc.
 
 - Fixing bugs
 
