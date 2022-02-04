@@ -26,7 +26,9 @@ SDL2 SDL2_image SDL2_mixer SDL2_ttf SDL2-devel SDL2_mixer-devel SDL2_image-devel
 libsdl2 libsdl2-dev libsdl2-mixer libsdl2-mixer-dev libsdl2-image libsdl2-image-dev libsdl2-ttf libsdl2-ttf-dev
 ```
 
-Note that macOS and Windows aren't supported right now; all development work is focused on Linux. However, it is planned to add support for compiling to Windows. macOS may not be possible due to the lack of a Mac for development and testing purposes.
+Note that macOS and Windows aren't supported right now; all development work is focused on Linux. 
+
+However, nothing is really preventing the game from running on Windows or Mac, just get the aforementioned libraries installed and compile
 
 ## Compiling and Running the Game
 
